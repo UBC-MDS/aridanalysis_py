@@ -1,5 +1,5 @@
 ### Introduction
-Welcome to the UBC DSCI-524 Collaborative Software Development project for group 8, please see the contributors file for the list of group members! We are committed to creating a friendly and respectful environment for learning and development, and therefore
+Welcome to the UBC DSCI-524 Collaborative Software Development project for group 8, please see the [contributors](https://github.com/UBC-MDS/DSCI524_Group8/blob/main/CONTRIBUTORS.md) file for the list of group members! We are committed to creating a friendly and respectful environment for learning and development, and therefore
 all participants in the project are expected to be respectful and considerate to others as outlined in the following sections.
 
 This document is intended to codify our expectations, and all parties in Group 8 have agreed to conform to this Code of Conduct.
