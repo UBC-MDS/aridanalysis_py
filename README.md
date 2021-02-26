@@ -4,6 +4,8 @@
 
 Python Package for Inferential Regression and EDA Analysis!
 
+For the function creation part of the project,  we based our selection criteria on the DRY principle. From experience we have gathered throughout the program, both the Exploratory Data Analysis and the Inferential Regression Statistical Analysis are two widespread procedures a Data Scientist faces daily. Yet, every time we face these tasks, we start the process from scratch, wasting both time and effort. With this into consideration,  this project's goal is to create a package with four reproducible and shareable functions that perform these routine tasks.
+
 ## Installation
 
 ```bash
