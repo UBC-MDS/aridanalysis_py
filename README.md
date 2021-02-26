@@ -18,6 +18,10 @@ Furthermore, the second function will create a conditional linear regression mod
 
 Moreover, the third function will create a generalized linear model of logistic regression for categorical dependent variables. The proposed inputs are a data frame of the data, the response column, two lists of the explanatory continuous and categorical variables, the flavour of logistic regression to be performed dependent on the data (binomial, ordinal or multinomial) and whether to consider interactive and polynomial models. As a response, the function will return the statistically significant features and their respective interpretation of probability odds.
 
+### Fourth Function: Regression for Counting Data
+
+Finally, the fourth and final function will perform an Inferential Regression Analysis on counting data. Like the previous functions, the required inputs for this correction function are a data frame, the response column, two lists or character vectors of the continuous and categorical explanatory variables, whether the model should be additive of interactive, and the polynomial degree of the linear combination conditioned on the response. For this instance, the family for creating the link function in the generalized linear model will not be chosen by the user and selected by the algorithm using overdispersion criteria. It is expected that the function returns both a list of the statistically significant features, their respective interpretations and the distribution family utilized for establishing the regression model.
+
 
 ## Installation
 
