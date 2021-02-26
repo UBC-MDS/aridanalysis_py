@@ -1,3 +1,5 @@
 
 def counting_regression():
-    return
+    x=4
+    print(x)
+    return x
