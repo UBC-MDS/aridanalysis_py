@@ -13,6 +13,7 @@ altair = "^4.1.0"
 seaborn = "^0.11.1"
 
 [tool.poetry.dev-dependencies]
+Sphinx = "^3.5.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
