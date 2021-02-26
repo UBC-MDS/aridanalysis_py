@@ -14,7 +14,9 @@ The first function will deal with the basic EDA, similar to the output provided 
 
 Furthermore, the second function will create a conditional linear regression model for the unrestricted responses. As inputs, this function will require a data frame with the data to analyze, the explanatory columns, both continuous and categorical (as different inputs) and whether interactive and polynomial models are required. The body and outputs will provide a multicollinearity analysis, the statistically significant variables with their respective interpretation over the response, and if the error or bias term's distributional assumptions were met.
 
+ ### Third Function: Logistic Regression
 
+Moreover, the third function will create a generalized linear model of logistic regression for categorical dependent variables. The proposed inputs are a data frame of the data, the response column, two lists of the explanatory continuous and categorical variables, the flavour of logistic regression to be performed dependent on the data (binomial, ordinal or multinomial) and whether to consider interactive and polynomial models. As a response, the function will return the statistically significant features and their respective interpretation of probability odds.
 
 
 ## Installation
