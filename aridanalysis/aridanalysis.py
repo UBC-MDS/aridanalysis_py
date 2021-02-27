@@ -129,6 +129,6 @@ def arid_countreg(data_frame, response, features=[], model="additive", polynomia
     Examples
     --------
     >>> from aridanalysis import aridanalysis
-    >>> aridanalysis.arid_countreg(df, income, features,"additiv")
+    >>> aridanalysis.arid_countreg(df, income, features = [feat1, feat5] ,"additive")
     """
     return None
