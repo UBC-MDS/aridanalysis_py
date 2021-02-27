@@ -28,9 +28,9 @@ This package will build off the EDA and statistical analysis provided by the [Pa
 
 ### Related Packages
 
-[Edapython](https://github.com/UBC-MDS/edapython): This package is similar to Pandas profiling without creating an HTML report as an output. Our package aims to gather the best of Pandas profiling with missing values analysis and most important visualization including a correlation heatmap.
-[regression](https://github.com/makr3la/regression) ([PyPI](https://pypi.org/project/regression/)): This package is a web app for loading tabular data to perform regression analysis. It differs from our package in that it only performs the regression modelling without any analysis or EDA.
-[mlinsights](https://github.com/sdpython/mlinsights/) ([PyPI](https://pypi.org/project/mlinsights/)): This package is an extension to SKLearn and implements a number of specialized models such as quantile regression. Unlike our package, it does not combine any EDA or analysis, and is meant to simply mimic the SKLearn environment while adding additional modelling features.
+- [Edapython](https://github.com/UBC-MDS/edapython): This package is similar to Pandas profiling without creating an HTML report as an output. Our package aims to gather the best of Pandas profiling with missing values analysis and most important visualization including a correlation heatmap.
+- [regression](https://github.com/makr3la/regression) ([PyPI](https://pypi.org/project/regression/)): This package is a web app for loading tabular data to perform regression analysis. It differs from our package in that it only performs the regression modelling without any analysis or EDA.
+- [mlinsights](https://github.com/sdpython/mlinsights/) ([PyPI](https://pypi.org/project/mlinsights/)): This package is an extension to SKLearn and implements a number of specialized models such as quantile regression. Unlike our package, it does not combine any EDA or analysis, and is meant to simply mimic the SKLearn environment while adding additional modelling features.
 
 ## Installation
 
