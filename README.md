@@ -4,23 +4,25 @@
 
 ## Python Package for Inferential Regression and EDA Analysis!
 
-For the function creation part of the project,  we based our selection criteria on the DRY principle. From experience we have gathered throughout the program, both the Exploratory Data Analysis and the Inferential Regression Statistical Analysis are two widespread procedures a Data Scientist faces daily. Yet, every time we face these tasks, we start the process from scratch, wasting both time and effort. With this into consideration,  this project's goal is to create a package with four reproducible and shareable functions that perform these routine tasks.
+As Data Scientists, being able to perform Exploratory Data Analysis as well as Regression Analysis are paramount to the process of analyzing trends in data. Moreover, following the DRY (Do Not Repeat Yourself) priciple is regarded as a majory priority for maximizing code quality. Yet, often times Data Scientists facing these tasks will start the entire process from scratch, wasting both time and effort while compromising code quality. The aridanalysis package strives to remedy this problem by giving users an easy-to-implement EDA function alongside 3 robust statistical tests that will simplify these analytical processes and produce an easy to read interpretation of the input data. Users will no longer have to write many lines of code to explore their data effectively. 
 
-### First Function: EDA
+## Package Functions
 
-The first function will deal with the basic EDA, similar to the output provided by Pandas profiling (although faster and much smaller), to understand the overall behaviour of the data over the response and its individual distributions. The inputs for this initial function are a data frame, the response column and a list of the explanatory variables presented in the representative data structure. In addition, the output of this function will provide a correlation matrix, scatterplots between the different features and the response, a distributional study of each component, either with histograms or density plots, and a visual representation of missing data.
+### arid_eda
 
-### Second Function: Linear Regression
+This function takes in the data frame of interest and generates summary statistics as well as basic exploratory data analysis plots to helps users understand the overall behaviour of the explanatory and response variables. 
 
-Furthermore, the second function will create a conditional linear regression model for the unrestricted responses. As inputs, this function will require a data frame with the data to analyze, the explanatory columns, both continuous and categorical (as different inputs) and whether interactive and polynomial models are required. The body and outputs will provide a multicollinearity analysis, the statistically significant variables with their respective interpretation over the response, and if the error or bias term's distributional assumptions were met.
+### arid_linreg
 
- ### Third Function: Logistic Regression
+This function takes in the data frame of interest and performs a regular linear regression. The function then outputs an interpretation of statistically significant variables alongside additional information pertaining to distributional assumptions. 
 
-Moreover, the third function will create a generalized linear model of logistic regression for categorical dependent variables. The proposed inputs are a data frame of the data, the response column, two lists of the explanatory continuous and categorical variables, the flavour of logistic regression to be performed dependent on the data (binomial, ordinal or multinomial) and whether to consider interactive and polynomial models. As a response, the function will return the statistically significant features and their respective interpretation of probability odds.
+### arid_logreg
 
-### Fourth Function: Regression for Counting Data
+This function takes in a data frame and performs different flavours of logistic regression based on user inputs. The function then outputs an interpretation (probability odds) of statistically significant variables alongside additional information pertaining to distributional assumptions. 
 
-Finally, the fourth and final function will perform an Inferential Regression Analysis on counting data. Like the previous functions, the required inputs for this correction function are a data frame, the response column, two lists or character vectors of the continuous and categorical explanatory variables, whether the model should be additive of interactive, and the polynomial degree of the linear combination conditioned on the response. For this instance, the family for creating the link function in the generalized linear model will not be chosen by the user and selected by the algorithm using overdispersion criteria. It is expected that the function returns both a list of the statistically significant features, their respective interpretations and the distribution family utilized for establishing the regression model.
+### arid_countreg
+
+This function takes a data frame and performs an Inferential Regression Analysis with count data; the flavour of this analysis will depend on several user inputs. The function will then reutn a list of statistically significant features alongside their interpretations as well as the distribution family. 
 
 ### Python Ecosystem Role
 
@@ -56,7 +58,13 @@ The official documentation is hosted on Read the Docs: https://aridanalysis.read
 
 ## Contributors
 
-We welcome and recognize all contributions. You can see a list of current contributors in the [contributors tab](https://github.com/ansarusc/aridanalysis/graphs/contributors).
+Group 8 Members:  
+Craig McLaughlin              : @cmmclaug  
+Daniel Ortiz Nunez            : @danielon-5  
+Neel Phaterpekar              : @nphaterp  
+Santiago Rugeles Schoonewolff : @ansarusc  
+
+We welcome and recognize all contributions. You can see a list of all current contributors in the [contributors tab](https://github.com/ansarusc/aridanalysis/graphs/contributors).
 
 ### Credits
 

@@ -1,51 +1,47 @@
+# Arid Analysis Code of Conduct
 
-Code of Conduct
----------------
+### Introduction
+Welcome to the UBC DSCI-524 Collaborative Software Development project for group 8, please see the [contributors file](https://github.com/UBC-MDS/DSCI524_Group8/blob/main/CONTRIBUTORS.md) for the list of group members! We are committed to creating a friendly and respectful environment for learning and development, and therefore
+all participants in the project are expected to be respectful and considerate to others as outlined in the following sections.
 
-Our Pledge
-^^^^^^^^^^
+This document is intended to codify our expectations, and all parties in Group 8 have agreed to conform to this Code of Conduct.
 
-In the interest of fostering an open and welcoming environment, we as contributors and maintainers pledge to making participation in our project and our community a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, gender identity and expression, level of experience, nationality, personal appearance, race, religion, or sexual identity and orientation.
+### The DSCI 524 Group 8 Code of Conduct
+We are dedicated to providing a welcoming and supportive environment for all, regardless of background or identity. Discrimination or harassment of anyone based on any characteristics is unacceptable and will not be tolerated. Furthermore, all contributors are expected to act respectfully and in good faith towards others to promote a positive atmosphere. Members should strive for inclusiveness and to welcome new contributors, regardless of technical experience, to promote project development!
 
-Our Standards
-^^^^^^^^^^^^^
+All members of Group 8, and those choosing to participate in this project, are required to conform to this Code of Conduct. The Code of Conduct applies to all project mediums managed by Group 8 including, but not limited to, Zoom, email, Slack, and GitHub. All group members are expected to assist with the enforcement of the Code of Conduct.
 
-Examples of behavior that contributes to creating a positive environment include:
+#### Expected Behavior
 
-* Using welcoming and inclusive language
-* Being respectful of differing viewpoints and experiences
-* Gracefully accepting constructive criticism
-* Focusing on what is best for the community
-* Showing empathy towards other community members
+All participants are expected to show respect and courtesy to others in all events and communications. All interactions, whether digital or physical, should be professional. In order to foster a positive and professional learning environment we encourage the following kinds of behaviours in all Group 8 communication channels:
 
-Examples of unacceptable behavior by participants include:
+- Use of welcoming and inclusive language
+- Be respectful of different viewpoints and experiences
+- Gracefully accept constructive criticism
+- Focus on what is best for the community
+- Show courtesy and respect towards other community members
+- Be extra regimented in our use of process.
 
-* The use of sexualized language or imagery and unwelcome sexual attention or advances
-* Trolling, insulting/derogatory comments, and personal or political attacks
-* Public or private harassment
-* Publishing others' private information, such as a physical or electronic address, without explicit permission
-* Other conduct which could reasonably be considered inappropriate in a professional setting
 
-Our Responsibilities
-^^^^^^^^^^^^^^^^^^^^
+#### Unacceptable Behavior
 
-Project maintainers are responsible for clarifying the standards of acceptable behavior and are expected to take appropriate and fair corrective action in response to any instances of unacceptable behavior.
+Examples of unacceptable behavior by group participants include:
 
-Project maintainers have the right and responsibility to remove, edit, or reject comments, commits, code, wiki edits, issues, and other contributions that are not aligned to this Code of Conduct, or to ban temporarily or permanently any contributor for other behaviors that they deem inappropriate, threatening, offensive, or harmful.
+- Written or verbal comments which have the effect of excluding people on the basis of membership of any specific group
+- Causing someone to fear for their safety through intimidating behaviour
+- Violent or aggressive threats or language directed against another person
+- The display of sexual or violent imagery
+- Unwelcome sexual attention
+- Nonconsensual or unwelcome physical contact
+- Sustained disruptive behaviour in talks, events or communications
+- Publication of private communication without consent
 
-Scope
-^^^^^
+#### Consequences of Unacceptable Behavior
 
-This Code of Conduct applies both within project spaces and in public spaces when an individual is representing the project or its community. Examples of representing a project or community include using an official project e-mail address, posting via an official social media account, or acting as an appointed representative at an online or offline event. Representation of a project may be further defined and clarified by project maintainers.
+Participants who are asked to stop any inappropriate behavior are expected to comply immediately. This applies to any Group 8 events and platforms, either online or in-person. Project maintainers have the right and responsibility to remove, edit, or reject comments, commits, code, issues, and other contributions that are not aligned with the Code of Conduct. Participants unwilling to comply to these standards will be temporarily or permanantly banned under the discretion of the other Group 8 contributors for behaviour deemed offensive or inappropriate as outlined above.
 
-Enforcement
-^^^^^^^^^^^
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting the project team. The project team will review and investigate all complaints, and will respond in a way that it deems appropriate to the circumstances. The project team is obligated to maintain confidentiality with regard to the reporter of an incident. Further details of specific enforcement policies may be posted separately.
+## Attribution 
+- Adapted from the [Carpentries Code of Conduct](https://docs.carpentries.org/topic_folders/policies/code-of-conduct.html),which can also be found [DSCI 522 Github page](https://github.com/datasets/covid-19/tree/master/data)
 
-Project maintainers who do not follow or enforce the Code of Conduct in good faith may face temporary or permanent repercussions as determined by other members of the project's leadership.
 
-Attribution
-^^^^^^^^^^^
-
-This Code of Conduct is adapted from the `Contributor Covenant homepage <http://contributor-covenant.org/version/1/4>`_, version 1.4.
