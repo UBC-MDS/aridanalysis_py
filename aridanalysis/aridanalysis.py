@@ -26,7 +26,7 @@ def arid_eda(data_frame, response, features):
     --------
     >>> arid_eda(house_prices, 'price', ['rooms', 'age','garage'])
     """
-
+    return None
 
 
 def arid_linreg(df, response, features = [], estimator = None, regularization = None):
