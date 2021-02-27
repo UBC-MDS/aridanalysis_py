@@ -28,7 +28,6 @@ def arid_eda(data_frame, response, features):
     """
     return None
 
-
 def arid_linreg(df, response, features = [], estimator = None, regularization = None):
     """
     Function that performs a linear regression on continuous response data. 
