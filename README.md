@@ -22,7 +22,7 @@ Moreover, the third function will create a generalized linear model of logistic 
 
 Finally, the fourth and final function will perform an Inferential Regression Analysis on counting data. Like the previous functions, the required inputs for this correction function are a data frame, the response column, two lists or character vectors of the continuous and categorical explanatory variables, whether the model should be additive of interactive, and the polynomial degree of the linear combination conditioned on the response. For this instance, the family for creating the link function in the generalized linear model will not be chosen by the user and selected by the algorithm using overdispersion criteria. It is expected that the function returns both a list of the statistically significant features, their respective interpretations and the distribution family utilized for establishing the regression model.
 
-## Python Ecosystem Role
+### Python Ecosystem Role
 
 This package will build off the EDA and statistical analysis provided by the [Pandas](https://pypi.org/project/pandas/) and [SKLearn](https://scikit-learn.org/stable/) Python packages to streamline data visualization and model analysis functionality. There are some existing packages that help you with this, however the `aridanalysis` package aims to ease the job of going through pandas profiling as well as providing different regression analysis interpretations. 
 
