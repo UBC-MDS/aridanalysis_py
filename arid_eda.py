@@ -1,4 +1,4 @@
-def arid_eda(param1, param2):
+def arid_eda(data_frame, response, features):
     """Function to create summary statistics and basic EDA plots.
     
     Given a data frame, this function outputs general exploratory 
