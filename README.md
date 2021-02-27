@@ -8,7 +8,7 @@ As Data Scientists, being able to perform Exploratory Data Analysis as well as R
 
 ## Package Functions
 
-### arid_eda 
+### arid_eda
 
 This function takes in the data frame of interest and generates summary statistics as well as basic exploratory data analysis plots to helps users understand the overall behaviour of the explanatory and response variables. 
 
@@ -20,7 +20,7 @@ This function takes in the data frame of interest and performs a regular linear 
 
 This function takes in a data frame and performs different flavours of logistic regression based on user inputs. The function then outputs an interpretation (probability odds) of statistically significant variables alongside additional information pertaining to distributional assumptions. 
 
-### arid_poisson (Probably not a good name but dry fish sounds funny)
+### arid_countreg
 
 This function takes a data frame and performs an Inferential Regression Analysis with count data; the flavour of this analysis will depend on several user inputs. The function will then reutn a list of statistically significant features alongside their interpretations as well as the distribution family. 
 
