@@ -48,7 +48,13 @@ The official documentation is hosted on Read the Docs: https://aridanalysis.read
 
 ## Contributors
 
-We welcome and recognize all contributions. You can see a list of current contributors in the [contributors tab](https://github.com/ansarusc/aridanalysis/graphs/contributors).
+Group 8 Members:
+Craig McLaughlin              : @cmmclaug
+Daniel Ortiz Nunez            : @danielon-5
+Neel Phaterpekar              : @nphaterp
+Santiago Rugeles Schoonewolff : @ansarusc
+
+We welcome and recognize all contributions. You can see a list of all current contributors in the [contributors tab](https://github.com/ansarusc/aridanalysis/graphs/contributors).
 
 ### Credits
 
