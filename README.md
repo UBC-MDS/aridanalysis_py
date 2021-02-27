@@ -22,6 +22,15 @@ Moreover, the third function will create a generalized linear model of logistic 
 
 Finally, the fourth and final function will perform an Inferential Regression Analysis on counting data. Like the previous functions, the required inputs for this correction function are a data frame, the response column, two lists or character vectors of the continuous and categorical explanatory variables, whether the model should be additive of interactive, and the polynomial degree of the linear combination conditioned on the response. For this instance, the family for creating the link function in the generalized linear model will not be chosen by the user and selected by the algorithm using overdispersion criteria. It is expected that the function returns both a list of the statistically significant features, their respective interpretations and the distribution family utilized for establishing the regression model.
 
+## Python Ecosystem Role
+
+This package will build off the EDA and statistical analysis provided by the [Pandas](https://pypi.org/project/pandas/) and [SKLearn](https://scikit-learn.org/stable/) Python packages to streamline data visualization and model analysis functionality. There are some existing packages that help you with this, however the `aridanalysis` package aims to ease the job of going through pandas profiling as well as providing different regression analysis interpretations. 
+
+### Related Packages
+
+[Edapython](https://github.com/UBC-MDS/edapython): This package is similar to Pandas profiling without creating an HTML report as an output. Our package aims to gather the best of Pandas profiling with missing values analysis and most important visualization including a correlation heatmap.
+[regression](https://github.com/makr3la/regression) ([PyPI](https://pypi.org/project/regression/)): This package is a web app for loading tabular data to perform regression analysis. It differs from our package in that it only performs the regression modelling without any analysis or EDA.
+[mlinsights](https://github.com/sdpython/mlinsights/) ([PyPI](https://pypi.org/project/mlinsights/)): This package is an extension to SKLearn and implements a number of specialized models such as quantile regression. Unlike our package, it does not combine any EDA or analysis, and is meant to simply mimic the SKLearn environment while adding additional modelling features.
 
 ## Installation
 
