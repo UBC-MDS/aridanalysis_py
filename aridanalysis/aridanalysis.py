@@ -95,37 +95,40 @@ def arid_logreg(data_frame, response, features=[], type="binomial", model="addit
     """
     return None
 
-def arid_countreg():
+def arid_countreg(data_frame, response, features=[], model="additive", polynomial=False, alpha=0.05):
     """
-    Function that performs linear regression on counting data, when the response
-    is restricted to be positive and natural. This function will perform count 
-    regression to the specified columns of a dataframe in function of the response, 
-    and return a substantial inferential analysis.
+    A function that performs linear regression on counting data when the response is 
+    restricted to be positive and natural. This function will perform count regression 
+    to the specified columns    of a data frame and return a substantial inferential analysis.
 
     Parameters
     ----------
-    df : pandas.Dataframe
-      A dataframe that contains the data to be analized
-     : string
+    data_frame : pandas.Dataframe
+      A dataframe that contains the data to be analized.
+    response : String
       A column name of the response variable
-    c : list
-    
+    features : list
+      A list of the explanatory variables to be used in the analysis. Default value is None, meaning
+      to use all the features in the data frame
     polynomial: boolean
-      Wheter the model should consider polynomial degree of 2 in the linear combination or not.
-    additive: 
+      Wheter the model should consider polynomial degree in the linear combination or not.
+    model: string
+      Model type. Either "additive" or "interactive"
+    alpha: float
+     Significance level
       
-     
-    
-    
 
     Returns
     -------
+    DataFrame
+      Data frame with 4 columns: 'features', 'p-value', 'significant', 'interpretation'
+    String
+      Which family was used in the generalized linear regression model based on an overdispersion and fitting analysis
+      
 
     Examples
     --------
     >>> from aridanalysis import aridanalysis
-    >>> aridanalysis.arid_countreg(df, income, features)
+    >>> aridanalysis.arid_countreg(df, income, features,"additiv")
     """
-    x=4
-    print(x)
-    return x
+    return None
