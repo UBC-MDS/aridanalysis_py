@@ -31,7 +31,8 @@ def arid_eda(data_frame, response, features):
 def arid_linreg(df, response, features = [], estimator = None, regularization = None):
     """
     Function that performs a linear regression on continuous response data. 
-    This function will fit a linear regression model on the input .
+    This function will fit a linear regression model on the input dataframe
+    using the response supplied and all or optionally specified features given.
 
     Parameters
     ----------
@@ -45,7 +46,7 @@ def arid_linreg(df, response, features = [], estimator = None, regularization = 
         The function used to fit the linear regression model The default is OLS
     regularization : string (optional)
         What level of regularization to use in the model values:
-        * L1 * L2 * L1L2 *
+        * L1 * L2 * L1L2
         
     Returns
     -------
