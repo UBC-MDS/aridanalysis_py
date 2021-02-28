@@ -1,34 +1,36 @@
-def arid_eda(data_frame, response, features):
-    """Function to create summary statistics and basic EDA plots.
+def arid_eda(data_frame, response, features=[]):
+    """
     
-    Given a data frame, this function outputs general exploratory 
-    analysis plots as well as basic statistics summarizing trends 
-    in the features of the input data. 
+    Function to create summary statistics and basic EDA plots. Given a data frame,
+    this function outputs general exploratory analysis plots as well as basic 
+    statistics summarizing trends in the features of the input data. 
     
     Parameters
     ----------
-    data_frame : DataFrame
-        A description of param1.
+    data_frame : pandas.DataFrame
+        The input dataframe to analyze
     response : str
-        Column name of response variable
+        A column name of the response variable
     features : list
-    A list of the feature names to perform EDA on
+        A list of the feature names to perform EDA on
     
     Returns
     -------
     altair.Chart
         Plots relevant to the exploratory data analysis
     
-    DataFrame
+    pandas.DataFrame
         A dataframe containing summary statistics relevant to the 
         selected feature and response variable.
+        
     Examples
     --------
+    >>> from aridanalysis import aridanalysis
     >>> arid_eda(house_prices, 'price', ['rooms', 'age','garage'])
     """
     return None
 
-def arid_linreg(df, response, features = [], estimator = None, regularization = None):
+def arid_linreg(data_frame, response, features=[], estimator=None, regularization=None):
     """
     Function that performs a linear regression on continuous response data. 
     This function will fit a linear regression model on the input dataframe
@@ -36,15 +38,15 @@ def arid_linreg(df, response, features = [], estimator = None, regularization = 
 
     Parameters
     ----------
-    df : pandas.Dataframe
-        A dataframe that contains the data to be analized
-    response : string
+    data_frame : pandas.Dataframe
+        The input dataframe to analyze
+    response : str
         A column name of the response variable
     features : list (optional)
         A list of the chosen explanatory feature columns
     estimator : function (optional)
         The function used to fit the linear regression model The default is OLS
-    regularization : string (optional)
+    regularization : str (optional)
         What level of regularization to use in the model values:
         * L1 * L2 * L1L2
         
@@ -69,10 +71,10 @@ def arid_logreg(data_frame, response, features=[], type="binomial", model="addit
     
     Parameters
     ----------
-    data_frame : DataFrame
-        A description of param1.
+    data_frame : pandas.DataFrame
+        The input dataframe to analyze
     response : str
-        Column name of response variable
+        A column name of the response variable
     features : list
         A list of the column names as explanatory variables
     type : str
@@ -86,7 +88,7 @@ def arid_logreg(data_frame, response, features=[], type="binomial", model="addit
     
     Returns
     -------
-    DataFrame
+    pandas.DataFrame
         Data frame with 4 columns: 'features', 'p-value', 'significant', 'interpretation'
     
     Examples
@@ -105,23 +107,23 @@ def arid_countreg(data_frame, response, features=[], model="additive", polynomia
     Parameters
     ----------
     data_frame : pandas.Dataframe
-      A dataframe that contains the data to be analized.
-    response : String
+      The input dataframe to analyze
+    response : str
       A column name of the response variable
     features : list
       A list of the explanatory variables to be used in the analysis. Default value is None, meaning
       to use all the features in the data frame
-    polynomial: boolean
-      Wheter the model should consider polynomial degree in the linear combination or not.
-    model: string
+    polynomial: bool
+      Whether the model should consider polynomial degree in the linear combination or not.
+    model: str
       Model type. Either "additive" or "interactive"
     alpha: float
-     Significance level
+      Significance level for analysis
       
 
     Returns
     -------
-    DataFrame
+    pandas.DataFrame
       Data frame with 4 columns: 'features', 'p-value', 'significant', 'interpretation'
     String
       Which family was used in the generalized linear regression model based on an overdispersion and fitting analysis
