@@ -1,5 +1,5 @@
 aridanalysis Code of Conduct
----------------
+----------------------------
 
 Introduction
 ^^^^^^^^^^^^
