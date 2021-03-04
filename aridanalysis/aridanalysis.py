@@ -1,4 +1,4 @@
-def arid_eda(data_frame, response, features=[]):
+def arid_eda(data_frame, response, response_type, features=[]):
     """
     
     Function to create summary statistics and basic EDA plots. Given a data frame,
@@ -29,29 +29,40 @@ def arid_eda(data_frame, response, features=[]):
     >>> arid_eda(house_prices, 'price', ['rooms', 'age','garage'])
     """
     chartlist = []
-    if type(response) is str:           # 
-        group = [response]
-    else: 
-        group = []
+    plot_width = 70*len(features)
+    plot_height = 70*len(features)
+    
+    
+    if response_type == 'categorical':
+        for feat in features:                            ### This function creates density plots for each feature 
+            chart = alt.Chart(df).transform_density(     ### only works currently if response is categorical 
+                feat,
+                as_=[feat, 'density'],
+                groupby=[response]
+                ).mark_area(interpolate='monotone', opacity=0.7).encode(
+                y = 'density:Q',
+                x = alt.X(feat),
+                color=response
+            ) 
+            chartlist.append(chart)
+    
+    elif response_type == 'continuous':
+    
+        for feat in features: 
+            chart = alt.Chart(df).mark_bar().encode(
+                y = 'count()',
+                x = alt.X(feat, bin=alt.Bin())#alt.X(alt.repeat(), type='quantitative', scale=alt.Scale(zero=False)),
+            ).properties(width=200, height=200)
+            chartlist.append(chart)
 
-    for feat in features:                            ### This function creates density plots for each feature 
-        chart = alt.Chart(df).transform_density(     ### only works currently if response is categorical 
-            feat,
-            as_=[feat, 'density'],
-            groupby=group
-            ).mark_area(interpolate='monotone', opacity=0.7).encode(
-            y = 'density:Q',
-            x = alt.X(feat),
-            color=response
-        ) 
-        chartlist.append(chart)
-        print(chartlist)
-
+    
     for i in range(len(chartlist)):  
         if i == 0:
             dist_output = chartlist[i]
-        else:
+        elif i % 2 == 0:
             dist_output = alt.vconcat(dist_output, chartlist[i])
+        elif i % 2 == 1:
+            dist_output = alt.hconcat(dist_output, chartlist[i])
 
     feature_df = df.loc[:,features]
     corr_df = feature_df.corr('spearman').stack().reset_index(name='corr')
@@ -63,6 +74,7 @@ def arid_eda(data_frame, response, features=[]):
         size='abs',
         color=alt.Color('corr', scale=alt.Scale(scheme='blueorange'))
     ).properties(width=plot_width, height=plot_height)
+    print(pd.DataFrame(df.describe()), "\n\n", feature_df.corr() , "\n\n\n")
 
     return dist_output | corr_plot
  
