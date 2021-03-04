@@ -28,8 +28,29 @@ def arid_eda(data_frame, response, features=[]):
     >>> from aridanalysis import aridanalysis
     >>> arid_eda(house_prices, 'price', ['rooms', 'age','garage'])
     """
-    return None
+    chartlist = []
 
+    for feat in features:                            ### This function creates density plots for each feature 
+        chart = alt.Chart(df).transform_density(     ### only works currently if response is categorical 
+            feat,
+            as_=[feat, 'density'],
+            groupby=[response]
+            ).mark_area(interpolate='monotone', opacity=0.7).encode(
+            y = 'density:Q',
+            x = alt.X(feat),
+            color=response
+        ) 
+        chartlist.append(chart)
+
+    for i in range(len(chartlist)):  
+        print(i)
+        if i == 0:
+            dist_output = chartlist[i]
+        else:
+            dist_output = alt.vconcat(output, chartlist[i])
+
+    return dist_output
+ 
 def arid_linreg(data_frame, response, features=[], estimator=None, regularization=None):
     """
     Function that performs a linear regression on continuous response data. 
