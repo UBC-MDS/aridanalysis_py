@@ -29,25 +29,29 @@ def arid_eda(data_frame, response, features=[]):
     >>> arid_eda(house_prices, 'price', ['rooms', 'age','garage'])
     """
     chartlist = []
-
+    if type(response) is str:           # 
+        group = [response]
+    else: 
+        group = []
+        
     for feat in features:                            ### This function creates density plots for each feature 
         chart = alt.Chart(df).transform_density(     ### only works currently if response is categorical 
             feat,
             as_=[feat, 'density'],
-            groupby=[response]
+            groupby=group
             ).mark_area(interpolate='monotone', opacity=0.7).encode(
             y = 'density:Q',
             x = alt.X(feat),
             color=response
         ) 
         chartlist.append(chart)
+        print(chartlist)
 
     for i in range(len(chartlist)):  
-        print(i)
         if i == 0:
             dist_output = chartlist[i]
         else:
-            dist_output = alt.vconcat(output, chartlist[i])
+            dist_output = alt.vconcat(dist_output, chartlist[i])
 
     return dist_output
  
