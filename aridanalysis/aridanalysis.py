@@ -33,7 +33,7 @@ def arid_eda(data_frame, response, features=[]):
         group = [response]
     else: 
         group = []
-        
+
     for feat in features:                            ### This function creates density plots for each feature 
         chart = alt.Chart(df).transform_density(     ### only works currently if response is categorical 
             feat,
@@ -53,7 +53,18 @@ def arid_eda(data_frame, response, features=[]):
         else:
             dist_output = alt.vconcat(dist_output, chartlist[i])
 
-    return dist_output
+    feature_df = df.loc[:,features]
+    corr_df = feature_df.corr('spearman').stack().reset_index(name='corr')
+    corr_df.loc[corr_df['corr'] == 1, 'corr'] = 0
+    corr_df['abs'] = corr_df['corr'].abs()
+    corr_plot = alt.Chart(corr_df).mark_rect().encode(
+        x='level_0',
+        y='level_1',
+        size='abs',
+        color=alt.Color('corr', scale=alt.Scale(scheme='blueorange'))
+    ).properties(width=plot_width, height=plot_height)
+
+    return dist_output | corr_plot
  
 def arid_linreg(data_frame, response, features=[], estimator=None, regularization=None):
     """
