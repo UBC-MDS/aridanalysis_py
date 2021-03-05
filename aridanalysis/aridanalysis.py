@@ -1,3 +1,6 @@
+import altair as alt
+import pandas as pd 
+
 def arid_eda(data_frame, response, response_type, features=[]):
     """
     
@@ -32,11 +35,12 @@ def arid_eda(data_frame, response, response_type, features=[]):
     chartlist = []
     plot_width = 70*len(features)
     plot_height = 70*len(features)
+    filter_df = data_frame.loc[:,features]
     
     
     if response_type == 'categorical':
         for feat in features:                            ### This function creates density plots for each feature 
-            chart = alt.Chart(df).transform_density(     ### only works currently if response is categorical 
+            chart = alt.Chart(data_frame).transform_density(     ### only works currently if response is categorical 
                 feat,
                 as_=[feat, 'density'],
                 groupby=[response]
@@ -50,7 +54,7 @@ def arid_eda(data_frame, response, response_type, features=[]):
     elif response_type == 'continuous':
     
         for feat in features: 
-            chart = alt.Chart(df).mark_bar().encode(
+            chart = alt.Chart(data_frame).mark_bar().encode(
                 y = 'count()',
                 x = alt.X(feat, bin=alt.Bin())#alt.X(alt.repeat(), type='quantitative', scale=alt.Scale(zero=False)),
             ).properties(width=200, height=200)
@@ -65,8 +69,7 @@ def arid_eda(data_frame, response, response_type, features=[]):
         elif i % 2 == 1:
             dist_output = alt.hconcat(dist_output, chartlist[i])
 
-    feature_df = df.loc[:,features]
-    corr_df = feature_df.corr('spearman').stack().reset_index(name='corr')
+    corr_df = filter_df.corr('spearman').stack().reset_index(name='corr')
     corr_df.loc[corr_df['corr'] == 1, 'corr'] = 0
     corr_df['corr_label'] = corr_df['corr'].map('{:.2f}'.format)
     corr_df['abs'] = corr_df['corr'].abs()
@@ -89,8 +92,9 @@ def arid_eda(data_frame, response, response_type, features=[]):
     )
 
     corr_plot = cor_sq + text
+    return_df = pd.DataFrame(filter_df.describe())
     
-    return pd.DataFrame(corr_df), dist_output | corr_plot
+    return return_df, dist_output | corr_plot
  
 def arid_linreg(data_frame, response, features=[], estimator=None, regularization=None):
     """

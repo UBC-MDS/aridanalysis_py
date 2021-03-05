@@ -2,15 +2,14 @@ import pytest
 import altair as alt
 import pandas as pd
 from vega_datasets import data
-from aridanalysis import arideda
+from aridanalysis import aridanalysis as aa
 
 
 def test_arideda_return():
     '''
     Test return data type
     '''
-
-    out = arideda(data.iris())
+    _ , out = aa.arid_eda(data.iris(), 'species', 'categorical', ['sepalLength', 'sepalWidth'])
     assert isinstance(out, alt.HConcatChart)
 
 
@@ -18,23 +17,23 @@ def test_arideda_features():
     """
     Test calling with valid features list
     """
-    out = explore_feature_map(data.iris(), ['sepalLength', 'sepalWidth'])
-    assert isinstance(out, alt.HConcatChart)
+    out, _ = aa.arid_eda(data.iris(), 'species', 'categorical', ['sepalLength', 'sepalWidth'])
+    assert isinstance(out, pd.core.frame.DataFrame)
 
 
 def test_arideda_numfeature():
     """
-    Test calling with features list containing non-numeric feature
+    Ensure data frame is appropriate size according to features
     """
-    with pytest.raises(ValueError, match='features are non-numeric'):
-        explore_feature_map(data.iris(), ['sepalLength', 'species'])
+    features = ['sepalLength', 'sepalWidth']
+    out, _ = aa.arid_eda(data.iris(), 'species', 'categorical', features)
+    assert out.shape == (8,len(features))
 
-def test_arideda_feature_exists():
+def test_arideda_returns_tuple():
     """
-    Test passing non-existent feature in features list
+    Check that function returns two items
     """
-    with pytest.raises(ValueError, match='Non-existent features'):
-        explore_feature_map(data.iris(), ['petalWidth', 'fakeHeight'])
+    assert len(aa.arid_eda(data.iris(), 'species', 'categorical', ['sepalLength', 'sepalWidth'])) == 2
 
 def test_arideda_empty_df():
     """
