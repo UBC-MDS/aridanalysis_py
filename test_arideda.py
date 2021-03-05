@@ -34,10 +34,3 @@ def test_arideda_returns_tuple():
     Check that function returns two items
     """
     assert len(aa.arid_eda(data.iris(), 'species', 'categorical', ['sepalLength', 'sepalWidth'])) == 2
-
-def test_arideda_empty_df():
-    """
-    Test passing empty data frame
-    """
-    with pytest.raises(ValueError, match='Empty dataframe'):
-        explore_feature_map(pd.DataFrame())

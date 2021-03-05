@@ -29,9 +29,37 @@ def arid_eda(data_frame, response, response_type, features=[]):
     Examples
     --------
     >>> from aridanalysis import aridanalysis
-    >>> dataframe, plots = arid_eda(house_prices, 'price', ['rooms', 'age','garage'])
+    >>> dataframe, plots = arid_eda(house_prices, 'price', 'continuous, ['rooms', 'age','garage'])
+    >>> dataframe, plots = arid_eda(iris_data, 'species', categorical,  ['petalWidth', 'sepalWidth','petalLength'])
     
     """
+    
+    
+    ############################ Exception Handling #####################################
+    if type(data_frame) != pd.core.frame.DataFrame:
+        raise KeyError('Input data must be a Pandas DataFrame')
+
+    if response not in data_frame.columns:
+        raise KeyError('Response variable is not contained within dataframe')
+    
+    for feat in features:
+        if feat not in data_frame.columns: 
+            raise KeyError(f'{feat} is not contained within dataframe')
+    
+    if response in features:
+        raise KeyError('Response variable must be distinct from features')
+    
+    if data_frame[response].dtype == np.dtype('O') and response_type == 'continuous':
+        raise KeyError('Current response variable is not continuous')
+    
+    if data_frame[response].dtype != np.dtype('O') and response_type == 'categorical':
+        raise KeyError('Current response variable is not categorical')
+    
+    if response_type not in ['categorical', 'continuous']:
+        raise KeyError('Response must be categorical or continuous')
+    
+    #####################################################################################
+ 
     chartlist = []
     plot_width = 70*len(features)
     plot_height = 70*len(features)
@@ -47,8 +75,7 @@ def arid_eda(data_frame, response, response_type, features=[]):
                 ).mark_area(interpolate='monotone', opacity=0.7).encode(
                 y = 'density:Q',
                 x = alt.X(feat),
-                color=response
-            ) 
+                color=response) 
             chartlist.append(chart)
     
     elif response_type == 'continuous':
@@ -56,7 +83,7 @@ def arid_eda(data_frame, response, response_type, features=[]):
         for feat in features: 
             chart = alt.Chart(data_frame).mark_bar().encode(
                 y = 'count()',
-                x = alt.X(feat, bin=alt.Bin())#alt.X(alt.repeat(), type='quantitative', scale=alt.Scale(zero=False)),
+                x = alt.X(feat, bin=alt.Bin())
             ).properties(width=200, height=200)
             chartlist.append(chart)
 
