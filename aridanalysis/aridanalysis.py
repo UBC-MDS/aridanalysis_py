@@ -26,7 +26,8 @@ def arid_eda(data_frame, response, response_type, features=[]):
     Examples
     --------
     >>> from aridanalysis import aridanalysis
-    >>> arid_eda(house_prices, 'price', ['rooms', 'age','garage'])
+    >>> dataframe, plots = arid_eda(house_prices, 'price', ['rooms', 'age','garage'])
+    
     """
     chartlist = []
     plot_width = 70*len(features)
@@ -67,16 +68,29 @@ def arid_eda(data_frame, response, response_type, features=[]):
     feature_df = df.loc[:,features]
     corr_df = feature_df.corr('spearman').stack().reset_index(name='corr')
     corr_df.loc[corr_df['corr'] == 1, 'corr'] = 0
+    corr_df['corr_label'] = corr_df['corr'].map('{:.2f}'.format)
     corr_df['abs'] = corr_df['corr'].abs()
-    corr_plot = alt.Chart(corr_df).mark_rect().encode(
-        x='level_0',
-        y='level_1',
-        size='abs',
-        color=alt.Color('corr', scale=alt.Scale(scheme='blueorange'))
-    ).properties(width=plot_width, height=plot_height)
-    print(pd.DataFrame(df.describe()), "\n\n", feature_df.corr() , "\n\n\n")
+    
+    base = alt.Chart(corr_df).encode(
+            x='level_0',
+            y='level_1'    
+        ).properties(width=plot_width, height=plot_height)
 
-    return dist_output | corr_plot
+    # Text layer with correlation labels
+    # Colors are for easier readability
+    text = base.mark_text().encode(
+        text='corr_label',
+        color=alt.value('white')
+    )
+
+    # The correlation heatmap itself
+    cor_sq = base.mark_rect().encode(
+        color=alt.Color('corr', scale=alt.Scale(scheme='blueorange'))   
+    )
+
+    corr_plot = cor_sq + text
+    
+    return pd.DataFrame(corr_df), dist_output | corr_plot
  
 def arid_linreg(data_frame, response, features=[], estimator=None, regularization=None):
     """

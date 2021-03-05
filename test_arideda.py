@@ -11,7 +11,7 @@ def test_arideda_return():
     '''
 
     out = arideda(data.iris())
-    assert isinstance(out, alt.VConcatChart)
+    assert isinstance(out, alt.HConcatChart)
 
 
 def test_arideda_features():
@@ -19,7 +19,7 @@ def test_arideda_features():
     Test calling with valid features list
     """
     out = explore_feature_map(data.iris(), ['sepalLength', 'sepalWidth'])
-    assert isinstance(out, alt.VConcatChart)
+    assert isinstance(out, alt.HConcatChart)
 
 
 def test_arideda_numfeature():
@@ -29,7 +29,7 @@ def test_arideda_numfeature():
     with pytest.raises(ValueError, match='features are non-numeric'):
         explore_feature_map(data.iris(), ['sepalLength', 'species'])
 
-def test_arideda_feature_exists()
+def test_arideda_feature_exists():
     """
     Test passing non-existent feature in features list
     """
