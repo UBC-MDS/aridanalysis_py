@@ -3,6 +3,7 @@ import pandas.api.types as ptypes
 import numpy as np
 from sklearn.linear_model import LinearRegression, Lasso, Ridge, ElasticNet
 import statsmodels.api as sm
+#import string_errors
 
 def arid_eda(data_frame, response, features=[]):
     """
@@ -68,12 +69,12 @@ def arid_linreg(data_frame, response, features=[], estimator=None, regularizatio
     """
 def arid_linreg(df, response, features=[], regularization=None, alpha=1):
     
-    assert isinstance(df, pd.DataFrame), "NOT A DATAFRAME"
-    assert not df.empty , "EMPTY DATAFRAME"
-    assert response in df.columns.tolist(), "RESPONSE NOT PRESENT"
-    assert ptypes.is_numeric_dtype(df[response].dtype), "RESPONSE INCORRECT DATATYPE"
-    assert regularization in [None, "L1", "L2", "L1L2"], "INVALID REGULARIZATION VALUE"
-    assert ptypes.is_numeric_dtype(type(alpha)), "INVALID ALPHA VALUE"
+    assert isinstance(df, pd.DataFrame), "ERROR: INVALID DATAFRAME INPUT"
+    assert not df.empty , "ERROR: EMPTY DATAFRAME INPUT"
+    assert response in df.columns.tolist(), "ERROR: INVALID RESPONSE INPUT"
+    assert ptypes.is_numeric_dtype(df[response].dtype), "ERROR: INVALID RESPONSE DATATYPE"
+    assert regularization in [None, "L1", "L2", "L1L2"], "ERROR: INVALID REGULARIZATION INPUT"
+    assert ptypes.is_numeric_dtype(type(alpha)), "ERROR: INVALID ALPHA INPUT"
     
     feature_df = df.drop(response, axis=1)
     feature_list = feature_df.select_dtypes(['number']).columns
@@ -88,7 +89,7 @@ def arid_linreg(df, response, features=[], regularization=None, alpha=1):
             missing_features = [feature for feature in features if not (feature in feature_list)]
             print(f"Missing features: {missing_features}")
 
-    assert len(feature_list) > 0, "NO VALID FEATURES"    
+    assert len(feature_list) > 0, "ERROR: NO VALID FEATURES"    
     print(f"Feature list: {feature_list}")
     
     X = df[feature_list]
