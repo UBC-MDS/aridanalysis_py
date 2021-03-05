@@ -1,3 +1,9 @@
+import pandas as pd
+import pandas.api.types as ptypes
+import numpy as np
+from sklearn.linear_model import LinearRegression, Lasso, Ridge, ElasticNet
+import statsmodels.api as sm
+
 def arid_eda(data_frame, response, features=[]):
     """
     
@@ -60,7 +66,48 @@ def arid_linreg(data_frame, response, features=[], estimator=None, regularizatio
     >>> from aridanalysis import aridanalysis
     >>> aridanalysis.arid_linreg(df, income)
     """
-    return None
+def arid_linreg(df, response, features=[], regularization=None, alpha=1):
+    
+    assert isinstance(df, pd.DataFrame), "NOT A DATAFRAME"
+    assert not df.empty , "EMPTY DATAFRAME"
+    assert response in df.columns.tolist(), "RESPONSE NOT PRESENT"
+    assert ptypes.is_numeric_dtype(df[response].dtype), "RESPONSE INCORRECT DATATYPE"
+    assert regularization in [None, "L1", "L2", "L1L2"], "INVALID REGULARIZATION VALUE"
+    assert ptypes.is_numeric_dtype(type(alpha)), "INVALID ALPHA VALUE"
+    
+    feature_df = df.drop(response, axis=1)
+    feature_list = feature_df.select_dtypes(['number']).columns
+    
+    if len(feature_df.columns) != len(feature_list):
+        non_numeric_features = [feature for feature in feature_df.columns if not (feature in feature_list)]
+        print(f"Lost non-numeric features: {non_numeric_features}")
+    
+    if len(features) > 0:
+        feature_list = set(features).intersection(feature_list)
+        if len(feature_list) != len(features):
+            missing_features = [feature for feature in features if not (feature in feature_list)]
+            print(f"Missing features: {missing_features}")
+
+    assert len(feature_list) > 0, "NO VALID FEATURES"    
+    print(f"Feature list: {feature_list}")
+    
+    X = df[feature_list]
+    y = df[response]
+    
+    if regularization == "L1":
+        skl_model = Lasso(alpha).fit(X, y)
+        sm_model = sm.OLS(y, X).fit_regularized(L1_wt = 1, alpha = alpha)
+    elif regularization == "L2":
+        skl_model = Ridge(alpha).fit(X, y)
+        sm_model = sm.OLS(y, X).fit_regularized(L1_wt = 0, alpha = alpha)
+    elif regularization == "L1L2":
+        skl_model = ElasticNet(alpha).fit(X, y)
+        sm_model = sm.OLS(y, X).fit_regularized(L1_wt = 0.5, alpha = alpha)
+    else:
+        skl_model = LinearRegression().fit(X, y)
+        sm_model = sm.OLS(y, X).fit()
+        
+    return skl_model
     
 def arid_logreg(data_frame, response, features=[], type="binomial", model="additive", polynomial=False, alpha=0.05):
     """Function to fit a logistic regression for a binomial or multinomial classification.
