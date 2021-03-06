@@ -6,7 +6,7 @@ authors = ["SantiagoRugelesSch <ansarusc@gmail.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.7"
 pandas = "^1.2.2"
 scikit-learn = "^0.24.1"
 altair = "^4.1.0"
