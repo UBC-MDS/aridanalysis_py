@@ -204,8 +204,8 @@ def arid_countreg(data_frame, response, con_features=[], cat_features=[], model=
     >>> from aridanalysis import aridanalysis
     >>> aridanalysis.arid_countreg(df, income, features = [feat1, feat5] ,"additive")
     """
-    assert isinstance(con_features, list), errors.INVALID_LIST
-    assert isinstance(cat_features, list), errors.INVALID_LIST
+    assert isinstance(con_features, list), "ERROR: INVALID LIST INTPUT PASSED"
+    assert isinstance(cat_features, list), "ERROR: INVALID LIST INTPUT PASSED"
     
     
     #Deal with the features column
@@ -218,9 +218,9 @@ def arid_countreg(data_frame, response, con_features=[], cat_features=[], model=
     assert isinstance(data_frame, pd.DataFrame), errors.INVALID_DATAFRAME
     assert not data_frame.empty , errors.EMPTY_DATAFRAME
     assert response in data_frame.columns.tolist(), errors.RESPONSE_NOT_FOUND
-    assert all(item in data_frame.columns.tolist() for item in con_features), errors.CON_FEAT_NOT_FOUND
-    assert all(item in data_frame.columns.tolist() for item in cat_features), errors.CAT_FEAT_NOT_FOUND
-    assert np.array_equal(data_frame[response], data_frame[response].astype(int)), errors.INVALID_RESPONSE_DATATYPE_COUNT
+    assert all(item in data_frame.columns.tolist() for item in con_features), "ERROR: CONTINUOUS VARIABLE(S) NOT IN DATAFRAME"
+    assert all(item in data_frame.columns.tolist() for item in cat_features), "ERROR: CATEGORICAL VARIABLE(S) NOT IN DATAFRAME"
+    assert ptypes.is_integer_dtype(data_frame[response].dtype), "ERROR: INVALID RESPONSE DATATYPE FOR COUNT REGRESSION: MUST BE TYPE INT"
     assert model in ["additive", "interactive"], "ERROR: INVALID MODEL PASSED"
     assert ptypes.is_numeric_dtype(type(alpha)), errors.INVALID_ALPHA_INPUT
     
@@ -228,14 +228,14 @@ def arid_countreg(data_frame, response, con_features=[], cat_features=[], model=
   
     #Scikit Learn Model 
     if len(cat_features) != 0:
-        X_sk = health_df[con_features + cat_features]
-        y_sk = health_df[response]
+        X_sk = data_frame[con_features + cat_features]
+        y_sk = data_frame[response]
         preprocessor = make_column_transformer((OneHotEncoder(handle_unknown="ignore"), cat_features))
         pipeline = make_pipeline(preprocessor, PoissonRegressor(alpha=alpha, fit_intercept=True,))
         sk_model = pipeline.fit(X_sk,y_sk)
     else:
-        X_sk = health_df[con_features]
-        y_sk = health_df[response]
+        X_sk = data_frame[con_features]
+        y_sk = data_frame[response]
         pipeline = make_pipeline(PoissonRegressor(alpha=0, fit_intercept=True, max_iter=100))
         sk_model = pipeline.fit(X_sk,y_sk)    
     #Aditive inferential model 
