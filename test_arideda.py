@@ -1,6 +1,7 @@
 import pytest
 import altair as alt
 import pandas as pd
+import numpy as np
 from vega_datasets import data
 from aridanalysis import aridanalysis as aa
 
@@ -34,3 +35,18 @@ def test_arideda_returns_tuple():
     Check that function returns two items
     """
     assert len(aa.arid_eda(data.iris(), 'species', 'categorical', ['sepalLength', 'sepalWidth'])) == 2
+
+
+def test_arideda_empty_df():
+    """
+    Test if error occurs when repsonse type is not categorical or continuous
+    """
+    with pytest.raises(KeyError):
+        aa.arid_eda(data.iris(), 'species', 'ORDINAL', ['sepalLength', 'sepalWidth'])
+
+def test_response_type_incorrect():
+    """
+    Test if an error occurs when wrong response type is given
+    """
+    with pytest.raises(KeyError):
+        aa.arid_eda(data.iris(), 'petalLength', 'categorical', ['sepalLength', 'sepalWidth'])

@@ -1,5 +1,6 @@
 import altair as alt
 import pandas as pd 
+import numpy as np
 
 def arid_eda(data_frame, response, response_type, features=[]):
     """
@@ -14,6 +15,8 @@ def arid_eda(data_frame, response, response_type, features=[]):
         The input dataframe to analyze
     response : str
         A column name of the response variable
+    response_type: str
+        Input either 'categorical' or 'continous to indicate response type
     features : list
         A list of the feature names to perform EDA on
     
