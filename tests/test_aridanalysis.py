@@ -6,6 +6,7 @@ import pytest
 import pandas as pd
 import numpy as np
 import sklearn
+import altair as alt
 from vega_datasets import data
 import statsmodels 
 import warnings

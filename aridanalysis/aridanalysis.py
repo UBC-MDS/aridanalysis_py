@@ -8,6 +8,8 @@ from sklearn.linear_model import PoissonRegressor
 from sklearn.compose import make_column_transformer
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.pipeline import make_pipeline
+import altair as alt
+from vega_datasets import data
 
 import sys, os
 myPath = os.path.dirname(os.path.abspath(__file__))
