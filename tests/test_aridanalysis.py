@@ -4,7 +4,10 @@ from aridanalysis import aridanalysis as aa
 import pytest
 
 import pandas as pd
+import numpy as np
 import sklearn
+import statsmodels
+import warnings
 
 import sys, os
 myPath = os.path.dirname(os.path.abspath(__file__))
@@ -55,25 +58,66 @@ def test_linreg_input_features(simple_frame):
         aa.arid_linreg(simple_frame, 'y', features=['b'])
     with pytest.raises(AssertionError, match=errors.NO_VALID_FEATURES):
         aa.arid_linreg(simple_frame, 'y', features=['x4'])
-    assert len(aa.arid_linreg(simple_frame, 'y').coef_) == 3
-    assert len(aa.arid_linreg(simple_frame, 'y', features=simple_frame.columns).coef_) == 3
-    assert len(aa.arid_linreg(simple_frame, 'y', features=['x1','x2','x3']).coef_) == 3
-    assert len(aa.arid_linreg(simple_frame, 'y', features=['x1','x2','x3','x4']).coef_) == 3
-    assert len(aa.arid_linreg(simple_frame, 'y', features=['x1']).coef_) == 1
-    assert len(aa.arid_linreg(simple_frame, 'y', features=['x2']).coef_) == 1
+    with pytest.warns(UserWarning):
+        aa.arid_linreg(simple_frame, 'y', features=['x1','x2','x3','x4'])
+    with pytest.warns(UserWarning):
+        aa.arid_linreg(simple_frame, 'y', features=['x1','b'])
+    assert len((aa.arid_linreg(simple_frame, 'y'))[0].coef_) == 3
+    assert len((aa.arid_linreg(simple_frame, 'y', features=simple_frame.columns))[0].coef_) == 3
+    assert len((aa.arid_linreg(simple_frame, 'y', features=['x1','x2','x3']))[0].coef_) == 3
+    assert len((aa.arid_linreg(simple_frame, 'y', features=['x1','x2','x3','x4']))[0].coef_) == 3
+    assert len((aa.arid_linreg(simple_frame, 'y', features=['x1']))[0].coef_) == 1
+    assert len((aa.arid_linreg(simple_frame, 'y', features=['x1','x2']))[0].coef_) == 2
+    assert len((aa.arid_linreg(simple_frame, 'y'))[1].params) == 3
+    assert len((aa.arid_linreg(simple_frame, 'y', features=simple_frame.columns))[1].params) == 3
+    assert len((aa.arid_linreg(simple_frame, 'y', features=['x1','x2','x3']))[1].params) == 3
+    assert len((aa.arid_linreg(simple_frame, 'y', features=['x1','x2','x3','x4']))[1].params) == 3
+    assert len((aa.arid_linreg(simple_frame, 'y', features=['x1']))[1].params) == 1
+    assert len((aa.arid_linreg(simple_frame, 'y', features=['x1','x2']))[1].params) == 2
 
 def test_linreg_model_types(simple_frame):
     '''
     Test linear regression output model types
     '''
-    assert type(aa.arid_linreg(simple_frame, 
-                               'y')) == sklearn.linear_model._base.LinearRegression
-    assert type(aa.arid_linreg(simple_frame, 
-                               'y', 
-                               regularization = 'L1')) == sklearn.linear_model._coordinate_descent.Lasso
-    assert type(aa.arid_linreg(simple_frame, 
-                               'y', 
-                               regularization = 'L2')) == sklearn.linear_model._ridge.Ridge
-    assert type(aa.arid_linreg(simple_frame, 
-                               'y', 
-                               regularization = 'L1L2')) == sklearn.linear_model._coordinate_descent.ElasticNet
+    assert type((aa.arid_linreg(simple_frame, 'y'))[0]) == \
+        sklearn.linear_model._base.LinearRegression
+    assert type((aa.arid_linreg(simple_frame, 'y', regularization = 'L1'))[0]) == \
+        sklearn.linear_model._coordinate_descent.Lasso
+    assert type((aa.arid_linreg(simple_frame, 'y', regularization = 'L2'))[0]) == \
+        sklearn.linear_model._ridge.Ridge
+    assert type((aa.arid_linreg(simple_frame, 'y', regularization = 'L1L2'))[0]) == \
+        sklearn.linear_model._coordinate_descent.ElasticNet
+    assert type((aa.arid_linreg(simple_frame, 'y'))[1]) == \
+        statsmodels.regression.linear_model.RegressionResultsWrapper
+    assert type((aa.arid_linreg(simple_frame, 'y', regularization = 'L1'))[1]) == \
+        statsmodels.base.elastic_net.RegularizedResultsWrapper
+    assert type((aa.arid_linreg(simple_frame, 'y', regularization = 'L2'))[1]) == \
+        statsmodels.base.elastic_net.RegularizedResults
+    assert type((aa.arid_linreg(simple_frame, 'y', regularization = 'L1L2'))[1]) == \
+        statsmodels.base.elastic_net.RegularizedResultsWrapper
+
+def test_linreg_model_coefficients(simple_frame):
+    '''
+    Test linear regression output statsmodel and sklearn model coefficients match
+    '''
+    assert aa.arid_linreg(simple_frame, 'y')[0].coef_.all() == \
+           (aa.arid_linreg(simple_frame, 'y')[1].params).to_numpy().all()
+    assert aa.arid_linreg(simple_frame, 'y', regularization = 'L1')[0].coef_.all() == \
+           (aa.arid_linreg(simple_frame, 'y', regularization = 'L1')[1].params).to_numpy().all()
+    assert aa.arid_linreg(simple_frame, 'y', regularization = 'L2')[0].coef_.all() == \
+           (aa.arid_linreg(simple_frame, 'y', regularization = 'L2')[1].params).all()
+    assert aa.arid_linreg(simple_frame, 'y', regularization = 'L1L2')[0].coef_.all() == \
+           (aa.arid_linreg(simple_frame, 'y', regularization = 'L1L2')[1].params).to_numpy().all()
+
+def test_linreg_model_predictions(simple_frame):
+    '''
+    Test linear regression output statsmodel and sklearn model predictions match
+    '''
+    assert aa.arid_linreg(simple_frame, 'y')[0].predict(np.array([[1,4,3]]))[0] == \
+           (aa.arid_linreg(simple_frame, 'y')[1].predict(np.array([[1,4,3]])))[0]
+    assert aa.arid_linreg(simple_frame, 'y', regularization = 'L1')[0].predict(np.array([[1,4,3]]))[0] == \
+           (aa.arid_linreg(simple_frame, 'y', regularization = 'L1')[1].predict(np.array([[1,4,3]])))[0]
+    assert aa.arid_linreg(simple_frame, 'y', regularization = 'L2')[0].predict(np.array([[1,4,3]]))[0] == \
+           (aa.arid_linreg(simple_frame, 'y', regularization = 'L2')[1].predict(np.array([[1,4,3]])))[0]
+    assert aa.arid_linreg(simple_frame, 'y', regularization = 'L1L2')[0].predict(np.array([[1,4,3]]))[0] == \
+           (aa.arid_linreg(simple_frame, 'y', regularization = 'L1L2')[1].predict(np.array([[1,4,3]])))[0]

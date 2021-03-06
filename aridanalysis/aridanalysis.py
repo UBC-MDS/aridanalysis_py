@@ -8,8 +8,7 @@ import sys, os
 myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + '/../aridanalysis')
 import error_strings as errors
-
-print(f"Invalid dataframe: {errors.INVALID_DATAFRAME}")
+import warnings
 
 def arid_eda(data_frame, response, features=[]):
     """
@@ -77,6 +76,7 @@ def arid_linreg(df, response, features=[], regularization=None, alpha=1):
     """
 def arid_linreg(df, response, features=[], regularization=None, alpha=1):
     
+    # Validate input arguments
     assert isinstance(df, pd.DataFrame), errors.INVALID_DATAFRAME
     assert not df.empty , errors.EMPTY_DATAFRAME
     assert response in df.columns.tolist(), errors.RESPONSE_NOT_FOUND
@@ -84,44 +84,54 @@ def arid_linreg(df, response, features=[], regularization=None, alpha=1):
     assert regularization in [None, "L1", "L2", "L1L2"], errors.INVALID_REGULARIZATION_INPUT
     assert ptypes.is_numeric_dtype(type(alpha)), errors.INVALID_ALPHA_INPUT
     
+    # Isolate numeric features from dataframe
     feature_df = df.drop(response, axis=1)
     feature_list = feature_df.select_dtypes(['number']).columns
     
+    # Report features that have been discarded to the user
     if len(feature_df.columns) != len(feature_list):
         non_numeric_features = [feature for feature in feature_df.columns if not (feature in feature_list)]
-        print(f"Lost non-numeric features: {non_numeric_features}")
+        warnings.warn(f"These features are non-numeric and will be discarded: {non_numeric_features}")
     
+    # Create a subset of user selected features if supplied
     if len(features) > 0:
         feature_list = set(features).intersection(feature_list)
+        # Report any user selected features that were not found
         if len(feature_list) != len(features):
             missing_features = [feature for feature in features if not (feature in feature_list)]
-            print(f"Missing features: {missing_features}")
+            warnings.warn(f"These user-selected features are not present in data: {missing_features}")
 
+    # Assert that there are still features available to perform regression
     assert len(feature_list) > 0, errors.NO_VALID_FEATURES    
     print(f"Feature list: {feature_list}")
     
+    # Formally define our features and response
     X = df[feature_list]
     y = df[response]
     
-    X = sm.add_constant(X)
+    # Create and fit analagous models in sklearn and statsmodels
     if regularization == "L1":
-        skl_model = Lasso(alpha).fit(X, y)
+        skl_model = Lasso(alpha, fit_intercept = False).fit(X, y)
         sm_model = sm.OLS(y, X).fit_regularized(L1_wt = 1, 
-                                                alpha = alpha,
-                                                refit = True)
+                                                    alpha = alpha)
     elif regularization == "L2":
-        skl_model = Ridge(alpha).fit(X, y)
+        skl_model = Ridge(alpha, fit_intercept = False).fit(X, y)
+        # No idea why statsmodels L2 alpha requires the division by 3, but it
+        # was tested empirically and coefficients/predictions match...
         sm_model = sm.OLS(y, X).fit_regularized(L1_wt = 0, 
-                                                alpha = alpha,
-                                                refit = True)
+                                                    alpha = alpha/3)
     elif regularization == "L1L2":
-        skl_model = ElasticNet(alpha).fit(X, y)
+        skl_model = ElasticNet(alpha, fit_intercept = False).fit(X, y)
         sm_model = sm.OLS(y, X).fit_regularized(L1_wt = 0.5, 
-                                                alpha = alpha,
-                                                refit = True)
+                                                alpha = alpha)
     else:
-        skl_model = LinearRegression().fit(X, y)
+        skl_model = LinearRegression(fit_intercept = False).fit(X, y)
         sm_model = sm.OLS(y, X).fit()
+     
+    # Display model coefficients to user
+    print(pd.DataFrame({'statsmodel coefficients' : sm_model.params,
+                        'sklearn coefficients' : skl_model.coef_}, index = feature_list))
+        
         
     return skl_model, sm_model
     
