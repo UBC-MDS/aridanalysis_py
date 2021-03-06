@@ -1,6 +1,7 @@
 import pandas as pd
 import pandas.api.types as ptypes
 import numpy as np
+import altair as alt
 from sklearn.linear_model import LinearRegression, Lasso, Ridge, ElasticNet
 import statsmodels.api as sm
 

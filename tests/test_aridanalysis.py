@@ -7,6 +7,7 @@ import pandas as pd
 import numpy as np
 import sklearn
 from vega_datasets import data
+import altair as alt
 import statsmodels 
 import warnings
 
