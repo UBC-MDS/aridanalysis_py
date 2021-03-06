@@ -64,14 +64,14 @@ def arid_eda(data_frame, response, response_type, features=[]):
     #####################################################################################
  
     chartlist = []
-    plot_width = 70*len(features)
-    plot_height = 70*len(features)
+    corr_plot_width = 70*len(set(features))
+    corr_plot_height = 70*len(set(features))
     filter_df = data_frame.loc[:,features]
     
     
     if response_type == 'categorical':
-        for feat in features:                            ### This function creates density plots for each feature 
-            chart = alt.Chart(data_frame).transform_density(     ### only works currently if response is categorical 
+        for feat in features:                                    # This function creates density plots for each feature 
+            chart = alt.Chart(data_frame, title=(feat + ' Distribution')).transform_density(     # only works currently if response is categorical 
                 feat,
                 as_=[feat, 'density'],
                 groupby=[response]
@@ -83,47 +83,64 @@ def arid_eda(data_frame, response, response_type, features=[]):
     
     elif response_type == 'continuous':
     
-        for feat in features: 
-            chart = alt.Chart(data_frame).mark_bar().encode(
+        for feat in features:                                     # This function creates histograms for each feature
+            chart = alt.Chart(data_frame, title=(feat + ' Distribution')).mark_bar().encode(      # only works currently if response is continuous 
                 y = 'count()',
-                x = alt.X(feat, bin=alt.Bin())
+                x = alt.X(feat, bin=alt.Bin(), title = feat)
             ).properties(width=200, height=200)
             chartlist.append(chart)
-
     
+#      for i in range(len(chartlist)):  
+#         if i == 0:
+#             dist_output = chartlist[i]
+#         elif i == 1:
+#             dist_output = alt.hconcat(dist_output, chartlist[i])
+#         elif i % 2 == 1:
+#             dist_output = alt.vconcat(dist_output, chartlist[i])
+
+    row_list = []
+    first_row = True
+    row_len = (len(set(features))**(1/2))//1
     for i in range(len(chartlist)):  
+        print(i)
         if i == 0:
-            dist_output = chartlist[i]
+            current_row = chartlist[i]
+        elif i % 2 != 0:
+            current_row = alt.hconcat(current_row, chartlist[i])
         elif i % 2 == 0:
-            dist_output = alt.vconcat(dist_output, chartlist[i])
-        elif i % 2 == 1:
-            dist_output = alt.hconcat(dist_output, chartlist[i])
+            row_list.append(current_row)
+            current_row = chartlist[i]
+    
+    row_list.append(current_row)       
+    for row in row_list:
+        if first_row:
+            dist_output = row
+            first_row = False
+        else: 
+            dist_output = alt.vconcat(dist_output, row)
 
     corr_df = filter_df.corr('spearman').stack().reset_index(name='corr')
     corr_df.loc[corr_df['corr'] == 1, 'corr'] = 0
     corr_df['corr_label'] = corr_df['corr'].map('{:.2f}'.format)
     corr_df['abs'] = corr_df['corr'].abs()
     
-    base = alt.Chart(corr_df).encode(
-            x='level_0',
-            y='level_1'    
-        ).properties(width=plot_width, height=plot_height)
+    base = alt.Chart(corr_df, title='Feature Correlation').encode(
+            x=alt.X('level_0', axis=alt.Axis(title='')),
+            y=alt.Y('level_1', axis=alt.Axis(title=''))  
+        ).properties(width=corr_plot_width, height=corr_plot_height)
 
-    # Text layer with correlation labels
-    # Colors are for easier readability
     text = base.mark_text().encode(
         text='corr_label',
         color=alt.value('white')
     )
 
-    # The correlation heatmap itself
     cor_sq = base.mark_rect().encode(
         color=alt.Color('corr', scale=alt.Scale(scheme='blueorange'))   
     )
 
     corr_plot = cor_sq + text
     return_df = pd.DataFrame(filter_df.describe())
-    
+
     return return_df, dist_output | corr_plot
  
 def arid_linreg(data_frame, response, features=[], estimator=None, regularization=None):
