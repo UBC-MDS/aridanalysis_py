@@ -3,7 +3,13 @@ import pandas.api.types as ptypes
 import numpy as np
 from sklearn.linear_model import LinearRegression, Lasso, Ridge, ElasticNet
 import statsmodels.api as sm
-#import string_errors
+
+import sys, os
+myPath = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, myPath + '/../aridanalysis')
+import error_strings as errors
+
+print(f"Invalid dataframe: {errors.INVALID_DATAFRAME}")
 
 def arid_eda(data_frame, response, features=[]):
     """
@@ -37,11 +43,11 @@ def arid_eda(data_frame, response, features=[]):
     """
     return None
 
-def arid_linreg(data_frame, response, features=[], estimator=None, regularization=None):
+def arid_linreg(df, response, features=[], regularization=None, alpha=1):
     """
-    Function that performs a linear regression on continuous response data. 
-    This function will fit a linear regression model on the input dataframe
-    using the response supplied and all or optionally specified features given.
+    Function that performs a linear regression on continuous response data,
+    using both an sklearn and statsmodel model analogs. These models are optimized
+    for prediction and inference, respectively.
 
     Parameters
     ----------
@@ -51,16 +57,18 @@ def arid_linreg(data_frame, response, features=[], estimator=None, regularizatio
         A column name of the response variable
     features : list (optional)
         A list of the chosen explanatory feature columns
-    estimator : function (optional)
-        The function used to fit the linear regression model The default is OLS
     regularization : str (optional)
         What level of regularization to use in the model values:
         * L1 * L2 * L1L2
+    alpha : float
+        The regularization weight strength
         
     Returns
     -------
-    pandas.DataFrame
-        A pandas dataframe with a list of features, and their coefficients 
+    sklearn.linear_model
+        A fitted sklearn model configured with the chosen input parameters
+    statsmodels.regression.linear_model
+        A fitted statsmodel configured with the chosen input parameters
 
     Examples
     --------
@@ -69,12 +77,12 @@ def arid_linreg(data_frame, response, features=[], estimator=None, regularizatio
     """
 def arid_linreg(df, response, features=[], regularization=None, alpha=1):
     
-    assert isinstance(df, pd.DataFrame), "ERROR: INVALID DATAFRAME INPUT"
-    assert not df.empty , "ERROR: EMPTY DATAFRAME INPUT"
-    assert response in df.columns.tolist(), "ERROR: INVALID RESPONSE INPUT"
-    assert ptypes.is_numeric_dtype(df[response].dtype), "ERROR: INVALID RESPONSE DATATYPE"
-    assert regularization in [None, "L1", "L2", "L1L2"], "ERROR: INVALID REGULARIZATION INPUT"
-    assert ptypes.is_numeric_dtype(type(alpha)), "ERROR: INVALID ALPHA INPUT"
+    assert isinstance(df, pd.DataFrame), errors.INVALID_DATAFRAME
+    assert not df.empty , errors.EMPTY_DATAFRAME
+    assert response in df.columns.tolist(), errors.RESPONSE_NOT_FOUND
+    assert ptypes.is_numeric_dtype(df[response].dtype), errors.INVALID_RESPONSE_DATATYPE
+    assert regularization in [None, "L1", "L2", "L1L2"], errors.INVALID_REGULARIZATION_INPUT
+    assert ptypes.is_numeric_dtype(type(alpha)), errors.INVALID_ALPHA_INPUT
     
     feature_df = df.drop(response, axis=1)
     feature_list = feature_df.select_dtypes(['number']).columns
@@ -89,26 +97,33 @@ def arid_linreg(df, response, features=[], regularization=None, alpha=1):
             missing_features = [feature for feature in features if not (feature in feature_list)]
             print(f"Missing features: {missing_features}")
 
-    assert len(feature_list) > 0, "ERROR: NO VALID FEATURES"    
+    assert len(feature_list) > 0, errors.NO_VALID_FEATURES    
     print(f"Feature list: {feature_list}")
     
     X = df[feature_list]
     y = df[response]
     
+    X = sm.add_constant(X)
     if regularization == "L1":
         skl_model = Lasso(alpha).fit(X, y)
-        sm_model = sm.OLS(y, X).fit_regularized(L1_wt = 1, alpha = alpha)
+        sm_model = sm.OLS(y, X).fit_regularized(L1_wt = 1, 
+                                                alpha = alpha,
+                                                refit = True)
     elif regularization == "L2":
         skl_model = Ridge(alpha).fit(X, y)
-        sm_model = sm.OLS(y, X).fit_regularized(L1_wt = 0, alpha = alpha)
+        sm_model = sm.OLS(y, X).fit_regularized(L1_wt = 0, 
+                                                alpha = alpha,
+                                                refit = True)
     elif regularization == "L1L2":
         skl_model = ElasticNet(alpha).fit(X, y)
-        sm_model = sm.OLS(y, X).fit_regularized(L1_wt = 0.5, alpha = alpha)
+        sm_model = sm.OLS(y, X).fit_regularized(L1_wt = 0.5, 
+                                                alpha = alpha,
+                                                refit = True)
     else:
         skl_model = LinearRegression().fit(X, y)
         sm_model = sm.OLS(y, X).fit()
         
-    return skl_model
+    return skl_model, sm_model
     
 def arid_logreg(data_frame, response, features=[], type="binomial", model="additive", polynomial=False, alpha=0.05):
     """Function to fit a logistic regression for a binomial or multinomial classification.
