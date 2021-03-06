@@ -124,9 +124,16 @@ def test_linreg_model_predictions(simple_frame):
     assert aa.arid_linreg(simple_frame, 'y', regularization = 'L1L2')[0].predict(np.array([[1,4,3]]))[0] == \
            (aa.arid_linreg(simple_frame, 'y', regularization = 'L1L2')[1].predict(np.array([[1,4,3]])))[0]
 
-health_df = pd.read_csv("badhealth.csv").drop(columns=["Unnamed: 0"])
-health_df["badh"] = health_df["badh"].astype('category')
-health_df["badh"] = health_df.badh.replace({0: 'bad', 1 : 'good'})
+@pytest.fixture
+def health_df(): 
+    '''
+    Create a basic test dataframe for linear regression tests
+    '''
+    health_df = pd.read_csv("tests/badhealth.csv").drop(columns=["Unnamed: 0"])
+    health_df["badh"] = health_df["badh"].astype('category')
+    health_df["badh"] = health_df.badh.replace({0: 'bad', 1 : 'good'})
+    return health_df
+
 
 def test_countreg_model_inputs(health_df):
     with pytest.raises(AssertionError, match="ERROR: INVALID LIST INTPUT PASSED"):
