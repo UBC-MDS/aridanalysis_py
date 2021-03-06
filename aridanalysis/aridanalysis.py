@@ -106,7 +106,7 @@ def arid_eda(df, response, response_type, features=[]):
 #         elif i % 2 == 1:
 #             dist_output = alt.vconcat(dist_output, chartlist[i])
 
-    row_list = []
+    row_list = []                               # This loop will output the feature distributions as a square
     first_row = True
     row_len = (len(set(features))**(1/2))//1
     for i in range(len(chartlist)):  
@@ -119,7 +119,8 @@ def arid_eda(df, response, response_type, features=[]):
             row_list.append(current_row)
             current_row = chartlist[i]
     
-    row_list.append(current_row)       
+    row_list.append(current_row)     
+    
     for row in row_list:
         if first_row:
             dist_output = row
