@@ -74,7 +74,6 @@ def arid_linreg(df, response, features=[], regularization=None, alpha=1):
     >>> from aridanalysis import aridanalysis
     >>> aridanalysis.arid_linreg(df, income)
     """
-def arid_linreg(df, response, features=[], regularization=None, alpha=1):
     
     # Validate input arguments
     assert isinstance(df, pd.DataFrame), errors.INVALID_DATAFRAME
