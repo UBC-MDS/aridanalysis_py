@@ -160,11 +160,11 @@ def test_linreg_model_predictions(simple_frame):
     '''
     Test linear regression output statsmodel and sklearn model predictions match
     '''
-    assert aa.arid_linreg(simple_frame, 'y')[0].predict(np.array([[1,4,3]]))[0] == \
-           (aa.arid_linreg(simple_frame, 'y')[1].predict(np.array([[1,4,3]])))[0]
-    assert aa.arid_linreg(simple_frame, 'y', regularization = 'L1')[0].predict(np.array([[1,4,3]]))[0] == \
-           (aa.arid_linreg(simple_frame, 'y', regularization = 'L1')[1].predict(np.array([[1,4,3]])))[0]
-    assert aa.arid_linreg(simple_frame, 'y', regularization = 'L2')[0].predict(np.array([[1,4,3]]))[0] == \
-           (aa.arid_linreg(simple_frame, 'y', regularization = 'L2')[1].predict(np.array([[1,4,3]])))[0]
-    assert aa.arid_linreg(simple_frame, 'y', regularization = 'L1L2')[0].predict(np.array([[1,4,3]]))[0] == \
-           (aa.arid_linreg(simple_frame, 'y', regularization = 'L1L2')[1].predict(np.array([[1,4,3]])))[0]
+    assert round(aa.arid_linreg(simple_frame, 'y')[0].predict(np.array([[1,4,3]]))[0], 3) == \
+           round((aa.arid_linreg(simple_frame, 'y')[1].predict(np.array([[1,4,3]])))[0], 3)
+    assert round(aa.arid_linreg(simple_frame, 'y', regularization = 'L1')[0].predict(np.array([[1,4,3]]))[0], 3) == \
+           round((aa.arid_linreg(simple_frame, 'y', regularization = 'L1')[1].predict(np.array([[1,4,3]])))[0], 3)
+    assert round(aa.arid_linreg(simple_frame, 'y', regularization = 'L2')[0].predict(np.array([[1,4,3]]))[0], 3) == \
+           round((aa.arid_linreg(simple_frame, 'y', regularization = 'L2')[1].predict(np.array([[1,4,3]])))[0], 3)
+    assert round(aa.arid_linreg(simple_frame, 'y', regularization = 'L1L2')[0].predict(np.array([[1,4,3]]))[0], 3) == \
+           round((aa.arid_linreg(simple_frame, 'y', regularization = 'L1L2')[1].predict(np.array([[1,4,3]])))[0], 3)
