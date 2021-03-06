@@ -2,7 +2,7 @@ import altair as alt
 import pandas as pd 
 import numpy as np
 
-def arid_eda(data_frame, response, response_type, features=[]):
+def arid_eda(df, response, response_type, features=[]):
     """
     
     Function to create summary statistics and basic EDA plots. Given a data frame,
@@ -11,7 +11,7 @@ def arid_eda(data_frame, response, response_type, features=[]):
     
     Parameters
     ----------
-    data_frame : pandas.DataFrame
+    df : pandas.DataFrame
         The input dataframe to analyze
     response : str
         A column name of the response variable
@@ -39,23 +39,23 @@ def arid_eda(data_frame, response, response_type, features=[]):
     
     
     ############################ Exception Handling #####################################
-    if type(data_frame) != pd.core.frame.DataFrame:
+    if type(df) != pd.core.frame.DataFrame:
         raise KeyError('Input data must be a Pandas DataFrame')
 
-    if response not in data_frame.columns:
+    if response not in df.columns:
         raise KeyError('Response variable is not contained within dataframe')
     
     for feat in features:
-        if feat not in data_frame.columns: 
+        if feat not in df.columns: 
             raise KeyError(f'{feat} is not contained within dataframe')
     
     if response in features:
         raise KeyError('Response variable must be distinct from features')
     
-    if data_frame[response].dtype == np.dtype('O') and response_type == 'continuous':
+    if df[response].dtype == np.dtype('O') and response_type == 'continuous':
         raise KeyError('Current response variable is not continuous')
     
-    if data_frame[response].dtype != np.dtype('O') and response_type == 'categorical':
+    if df[response].dtype != np.dtype('O') and response_type == 'categorical':
         raise KeyError('Current response variable is not categorical')
     
     if response_type not in ['categorical', 'continuous']:
@@ -66,12 +66,12 @@ def arid_eda(data_frame, response, response_type, features=[]):
     chartlist = []
     corr_plot_width = 70*len(set(features))
     corr_plot_height = 70*len(set(features))
-    filter_df = data_frame.loc[:,features]
+    filter_df = df.loc[:,features]
     
     
     if response_type == 'categorical':
         for feat in features:                                    # This function creates density plots for each feature 
-            chart = alt.Chart(data_frame, title=(feat + ' Distribution')).transform_density(     # only works currently if response is categorical 
+            chart = alt.Chart(df, title=(feat + ' Distribution')).transform_density(     # only works currently if response is categorical 
                 feat,
                 as_=[feat, 'density'],
                 groupby=[response]
@@ -84,7 +84,7 @@ def arid_eda(data_frame, response, response_type, features=[]):
     elif response_type == 'continuous':
     
         for feat in features:                                     # This function creates histograms for each feature
-            chart = alt.Chart(data_frame, title=(feat + ' Distribution')).mark_bar().encode(      # only works currently if response is continuous 
+            chart = alt.Chart(df, title=(feat + ' Distribution')).mark_bar().encode(      # only works currently if response is continuous 
                 y = 'count()',
                 x = alt.X(feat, bin=alt.Bin(), title = feat)
             ).properties(width=200, height=200)
