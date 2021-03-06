@@ -1,12 +1,9 @@
 from aridanalysis import __version__
 from aridanalysis import aridanalysis as aa
-
 import pytest
-
 import pandas as pd
 import numpy as np
 import sklearn
-import altair as alt
 from vega_datasets import data
 import altair as alt
 import statsmodels 
@@ -21,7 +18,6 @@ def test_version():
     assert __version__ == '0.1.0'
 
 
-
 @pytest.fixture
 def simple_frame(): 
     '''
@@ -33,7 +29,6 @@ def simple_frame():
                         'x4': ['a', 'a', 'b'],
                         'y': [1, 3, -1.0]})
     return tdf
-
 
 def test_arideda_return():
     """
