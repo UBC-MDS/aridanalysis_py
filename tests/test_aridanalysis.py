@@ -191,8 +191,7 @@ def test_logreg_model_inputs(log_df):
         aa.arid_logreg(log_df, response="Target", features=["Age", "Sex"], type="ordinal")   
 
 def test_logreg_model_outputs(log_df):
-    assert len(aa.arid_logreg(df=log_df, response="Target", features=[], type="binomial")[0][0].coef_) == 0.091224
-    assert len(aa.arid_logreg(log_df, response="Target", features=["Age"], type="binomial")[0][0].coef_) == 0.014592
-    assert len(aa.arid_logreg(log_df, response="Target", features=["Weight"], type="binomial")[0][0].coef_) == 0.003255
-    assert len(aa.arid_logreg(health_df, response="numvisit", con_features=["age"], cat_features=["badh"], model="interactive")[1].params) == 4
+    assert round((aa.arid_logreg(df=log_df, response="Target", features=[], type="binomial")[0].coef_)[0][0], 3) == 0.091
+    assert round((aa.arid_logreg(log_df, response="Target", features=["Age"], type="binomial")[0].coef_)[0][0], 3) == 0.015
+    assert round((aa.arid_logreg(log_df, response="Target", features=["Weight"], type="binomial")[0].coef_)[0][0], 3) == 0.003
     assert type(aa.arid_logreg(df=log_df, response="Target", features=[], type="binomial")[1]) == statsmodels.discrete.discrete_model.BinaryResultsWrapper 
