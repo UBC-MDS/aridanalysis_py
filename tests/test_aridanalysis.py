@@ -15,7 +15,7 @@ sys.path.insert(0, myPath + '/../aridanalysis')
 import error_strings as errors
 
 def test_version():
-    assert __version__ == '0.1.0'
+    assert __version__ == '0.2.0'
 
 @pytest.fixture
 def simple_frame(): 
