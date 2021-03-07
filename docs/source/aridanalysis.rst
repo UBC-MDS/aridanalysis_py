@@ -12,6 +12,14 @@ aridanalysis.aridanalysis module
    :undoc-members:
    :show-inheritance:
 
+aridanalysis.error\_strings module
+----------------------------------
+
+.. automodule:: aridanalysis.error_strings
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 
