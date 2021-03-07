@@ -174,7 +174,7 @@ def health_df():
     '''
     Create a basic test dataframe for linear regression tests
     '''
-    health_df = pd.read_csv("tests/badhealth.csv").drop(columns=["Unnamed: 0"])
+    health_df = pd.read_csv("tests/toy_data/badhealth.csv").drop(columns=["Unnamed: 0"])
     health_df["badh"] = health_df["badh"].astype('category')
     health_df["badh"] = health_df.badh.replace({0: 'bad', 1 : 'good'})
     return health_df
