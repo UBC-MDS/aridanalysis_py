@@ -6,12 +6,14 @@ authors = ["SantiagoRugelesSch <ansarusc@gmail.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.7"
 pandas = "^1.2.2"
 scikit-learn = "^0.24.1"
 altair = "^4.1.0"
 seaborn = "^0.11.1"
+statsmodels = "^0.12.2"
 vega-datasets = "^0.9.0"
+pytest = "^6.2.2"
 
 [tool.poetry.dev-dependencies]
 Sphinx = "^3.5.1"
@@ -20,3 +22,9 @@ sphinxcontrib-napoleon = "^0.7"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore::UserWarning",
+    "ignore::DeprecationWarning"
+]

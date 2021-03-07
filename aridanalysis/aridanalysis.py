@@ -4,6 +4,11 @@ import numpy as np
 import altair as alt
 from sklearn.linear_model import LinearRegression, Lasso, Ridge, ElasticNet, LogisticRegression
 import statsmodels.api as sm
+import statsmodels.formula.api as smf
+from sklearn.linear_model import PoissonRegressor
+from sklearn.compose import make_column_transformer
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.pipeline import make_pipeline
 
 import sys, os
 myPath = os.path.dirname(os.path.abspath(__file__))
@@ -153,7 +158,6 @@ def arid_eda(df, response, response_type, features=[]):
 
     return return_df, dist_output | corr_plot
  
-
 
 def arid_linreg(df, response, features=[], regularization=None, alpha=1):
     """
@@ -318,37 +322,115 @@ def arid_logreg(df, response, features=[], type="binomial"):
         
     return skl_model, sm_model
 
-def arid_countreg(data_frame, response, features=[], model="additive", polynomial=False, alpha=0.05):
+def arid_countreg(data_frame, response, con_features=[], cat_features=[], model="additive", alpha=1):
     """
-    A function that performs linear regression on counting data when the response is 
-    restricted to be positive and natural. This function will perform count regression 
-    to the specified columns    of a data frame and return a substantial inferential analysis.
+    Function that performs a count regression on a numerical discete response data,
+    using both an sklearn and statsmodel model analogs (prediction and inference). 
+    The function will return both models,each one with their respective insights.
+
     Parameters
     ----------
     data_frame : pandas.Dataframe
-      The input dataframe to analyze
+      The input dataframe to analyze.
     response : str
-      A column name of the response variable
-    features : list
-      A list of the explanatory variables to be used in the analysis. Default value is None, meaning
-      to use all the features in the data frame
-    polynomial: bool
-      Whether the model should consider polynomial degree in the linear combination or not.
+      A column name of the response variable. Because the function manipulates count data, it must be of type int.
+    con_features : list
+      A list of the continuous explanatory variables to be used in the analysis. Default value is None, meaning
+      to use all the numerical columns in the data frame.
+    cat_features : list
+      A list of the categorical explanatory variables to be used in the analysis. Default value is None, meaning
+      to use all the categorical columns in the data frame.
     model: str
       Model type. Either "additive" or "interactive"
     alpha: float
-      Significance level for analysis
+      Constant the controls regularization strength in predictive model
+      
       
     Returns
     -------
-    pandas.DataFrame
-      Data frame with 4 columns: 'features', 'p-value', 'significant', 'interpretation'
-    String
-      Which family was used in the generalized linear regression model based on an overdispersion and fitting analysis
-      
+    sklearn.linear_model
+        A fitted sklearn model configured with the chosen input parameters
+    statsmodels.regression.linear_model
+        A fitted statsmodel configured with the chosen input parameters
+
+
     Examples
     --------
     >>> from aridanalysis import aridanalysis
     >>> aridanalysis.arid_countreg(df, income, features = [feat1, feat5] ,"additive")
     """
-    return None
+    assert isinstance(con_features, list), "ERROR: INVALID LIST INTPUT PASSED"
+    assert isinstance(cat_features, list), "ERROR: INVALID LIST INTPUT PASSED"
+    
+    
+    #Deal with the features column
+    if len(con_features) == 0:
+        con_features = data_frame.drop(columns=[response]).select_dtypes('number').columns.tolist()
+    if len(cat_features) == 0:
+        cat_features = data_frame.drop(columns=[response]).select_dtypes(['category', 'object']).columns.tolist()
+    
+    
+    assert isinstance(data_frame, pd.DataFrame), errors.INVALID_DATAFRAME
+    assert not data_frame.empty , errors.EMPTY_DATAFRAME
+    assert response in data_frame.columns.tolist(), errors.RESPONSE_NOT_FOUND
+    assert all(item in data_frame.columns.tolist() for item in con_features), "ERROR: CONTINUOUS VARIABLE(S) NOT IN DATAFRAME"
+    assert all(item in data_frame.columns.tolist() for item in cat_features), "ERROR: CATEGORICAL VARIABLE(S) NOT IN DATAFRAME"
+    assert ptypes.is_integer_dtype(data_frame[response].dtype), "ERROR: INVALID RESPONSE DATATYPE FOR COUNT REGRESSION: MUST BE TYPE INT"
+    assert model in ["additive", "interactive"], "ERROR: INVALID MODEL PASSED"
+    assert ptypes.is_numeric_dtype(type(alpha)), errors.INVALID_ALPHA_INPUT
+    
+    
+  
+    #Scikit Learn Model 
+    if len(cat_features) != 0:
+        X_sk = data_frame[con_features + cat_features]
+        y_sk = data_frame[response]
+        preprocessor = make_column_transformer((OneHotEncoder(handle_unknown="ignore"), cat_features))
+        pipeline = make_pipeline(preprocessor, PoissonRegressor(alpha=alpha, fit_intercept=True,))
+        sk_model = pipeline.fit(X_sk,y_sk)
+    else:
+        X_sk = data_frame[con_features]
+        y_sk = data_frame[response]
+        pipeline = make_pipeline(PoissonRegressor(alpha=0, fit_intercept=True, max_iter=100))
+        sk_model = pipeline.fit(X_sk,y_sk)    
+    #Aditive inferential model 
+    if model == "additive":
+        cat_features =["C(" + i + ")" for i in cat_features]
+        con_list = "".join([f"{i}" if i is con_features[0] else f" + {i}"for i in con_features])
+        cat_list = "".join([f"{i}" if i is cat_features[0] else f" + {i}"for i in cat_features])
+        if len(cat_list) > 0:
+            formula =  f"{response} ~ {con_list} + {cat_list}"
+        else:
+            formula =  f"{response} ~ {con_list}"
+        glm_count= smf.glm(formula=formula, data=data_frame, family=sm.families.Poisson()).fit()
+        print(glm_count.summary())   
+    else :
+        cat_features =["C(" + i + ")" for i in cat_features]
+        con_list = "".join([f"{i}" if i is con_features[0] else f" + {i}"for i in con_features])
+        cat_list = "".join([f"{i}" if i is cat_features[0] else f" + {i}"for i in cat_features])
+        interact_list = "".join([f"{i} * {j}" if j is cat_features[0] and i is con_features[0] 
+                         else f" + {i} * {j}" for i in con_features for j in cat_features])
+        equal = set()
+        cont_interaction = ""
+        for i in con_features[0:]:
+            for j in con_features[1:]:
+                if i is con_features[0] and j is con_features[1]:
+                    cont_interaction = f"{i} * {j}" 
+                    equal.update([(i,j)])
+                    if len(equal)>0:
+                        continue
+                if i != j and (j, i) not in equal:
+                    equal.update([(i,j)])
+                    cont_interaction += f" + {i} * {j}"
+        if len(cat_features) > 0 and len(cont_interaction) > 0:
+            formula = f"{response} ~ {con_list} + {cat_list} + {interact_list} + {cont_interaction}"
+        elif len(cat_features) == 0 and len(cont_interaction) > 0:
+            formula = f"{response} ~ {con_list} + {cont_interaction}"
+        elif len(cat_features) > 0 and len(cont_interaction)  == 0:
+            formula = f"{response} ~ {con_list} + {cat_list} + {interact_list}"
+        else:
+            formula = f"{response} ~ {con_list}"
+        glm_count= smf.glm(formula=formula, data=data_frame, family=sm.families.Poisson()).fit()
+        print(glm_count.summary())  
+        
+    return (sk_model, glm_count)
