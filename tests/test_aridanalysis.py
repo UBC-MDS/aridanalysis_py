@@ -6,8 +6,6 @@ import pytest
 import pandas as pd
 import numpy as np
 import sklearn
-from vega_datasets import data
-import altair as alt
 import statsmodels 
 import warnings
 
@@ -189,5 +187,12 @@ def test_logreg_model_inputs(log_df):
         aa.arid_logreg(pd.DataFrame(), response="Target", features=["Age", "Sex"], type="binomial")
     with pytest.raises(AssertionError, match=errors.RESPONSE_NOT_FOUND):
         aa.arid_logreg(df=log_df, response="targ", features=["Age", "Sex"], type="binomial")    
-    with pytest.raises(AssertionError, match=errors.INVALID_TYPE"):
-        aa.arid_logreg(log_df, response="Target", features=["Age", "Sex"], type="ordinal")    
+    with pytest.raises(AssertionError, match=errors.INVALID_TYPE):
+        aa.arid_logreg(log_df, response="Target", features=["Age", "Sex"], type="ordinal")   
+
+def test_logreg_model_outputs(log_df):
+    assert len(aa.arid_logreg(df=log_df, response="Target", features=[], type="binomial")[0][0].coef_) == 0.091224
+    assert len(aa.arid_logreg(log_df, response="Target", features=["Age"], type="binomial")[0][0].coef_) == 0.014592
+    assert len(aa.arid_logreg(log_df, response="Target", features=["Weight"], type="binomial")[0][0].coef_) == 0.003255
+    assert len(aa.arid_logreg(health_df, response="numvisit", con_features=["age"], cat_features=["badh"], model="interactive")[1].params) == 4
+    assert type(aa.arid_logreg(df=log_df, response="Target", features=[], type="binomial")[1]) == statsmodels.discrete.discrete_model.BinaryResultsWrapper 
