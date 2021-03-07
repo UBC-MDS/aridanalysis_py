@@ -1,8 +1,6 @@
 from aridanalysis import __version__
 from aridanalysis import aridanalysis as aa
-
 import pytest
-
 import pandas as pd
 import numpy as np
 import sklearn
@@ -19,6 +17,7 @@ import error_strings as errors
 def test_version():
     assert __version__ == '0.1.0'
 
+
 @pytest.fixture
 def simple_frame(): 
     '''
@@ -30,7 +29,6 @@ def simple_frame():
                         'x4': ['a', 'a', 'b'],
                         'y': [1, 3, -1.0]})
     return tdf
-
 
 def test_arideda_return():
     """
@@ -161,6 +159,7 @@ def test_linreg_model_predictions(simple_frame):
     '''
     Test linear regression output statsmodel and sklearn model predictions match
     '''
+
     assert round(aa.arid_linreg(simple_frame, 'y')[0].predict(np.array([[1,4,3]]))[0], 3) == \
            round((aa.arid_linreg(simple_frame, 'y')[1].predict(np.array([[1,4,3]])))[0], 3)
     assert round(aa.arid_linreg(simple_frame, 'y', regularization = 'L1')[0].predict(np.array([[1,4,3]]))[0], 3) == \
@@ -169,3 +168,49 @@ def test_linreg_model_predictions(simple_frame):
            round((aa.arid_linreg(simple_frame, 'y', regularization = 'L2')[1].predict(np.array([[1,4,3]])))[0], 3)
     assert round(aa.arid_linreg(simple_frame, 'y', regularization = 'L1L2')[0].predict(np.array([[1,4,3]]))[0], 3) == \
            round((aa.arid_linreg(simple_frame, 'y', regularization = 'L1L2')[1].predict(np.array([[1,4,3]])))[0], 3)
+
+@pytest.fixture
+def health_df(): 
+    '''
+    Create a basic test dataframe for linear regression tests
+    '''
+    health_df = pd.read_csv("tests/toy_data/badhealth.csv").drop(columns=["Unnamed: 0"])
+    health_df["badh"] = health_df["badh"].astype('category')
+    health_df["badh"] = health_df.badh.replace({0: 'bad', 1 : 'good'})
+    return health_df
+
+
+def test_countreg_model_inputs(health_df):
+    with pytest.raises(AssertionError, match="ERROR: INVALID LIST INTPUT PASSED"):
+        aa.arid_countreg(health_df, response="numvisit", con_features="age", cat_features=["badh"], model="additive")
+    with pytest.raises(AssertionError, match="ERROR: INVALID LIST INTPUT PASSED"):
+        aa.arid_countreg(health_df, response="numvisit", con_features=["age"], cat_features="badh", model="additive")
+    with pytest.raises(AssertionError, match=errors.INVALID_DATAFRAME):
+        aa.arid_countreg(17, response="numvisit", con_features=["age"], cat_features=["badh"], model="additive")
+    with pytest.raises(AssertionError, match=errors.EMPTY_DATAFRAME):
+        aa.arid_countreg(pd.DataFrame(), response="numvisit", con_features=["age"], cat_features=["badh"], model="additive")
+    with pytest.raises(AssertionError, match=errors.RESPONSE_NOT_FOUND):
+        aa.arid_countreg(data_frame=health_df, response="num", con_features=["age"], cat_features=["badh"], model="additive")    
+    with pytest.raises(AssertionError, match="ERROR: INVALID RESPONSE DATATYPE FOR COUNT REGRESSION: MUST BE TYPE INT"):
+        aa.arid_countreg(data_frame=health_df, response="badh", con_features=["age"], cat_features=[], model="additive")
+    with pytest.raises(AssertionError, match="ERROR: INVALID MODEL PASSED"):
+        aa.arid_countreg(health_df, response="numvisit", con_features=["age"], cat_features=[], model="additives")
+    with pytest.raises(AssertionError, match=errors.INVALID_ALPHA_INPUT):
+        aa.arid_countreg(health_df, response="numvisit", con_features=["age"], cat_features=[], model="additive",alpha="san")
+        
+def test_countreg_model_outputs(health_df):
+    assert len(aa.arid_countreg(data_frame = health_df, response="numvisit", con_features=["age"], cat_features=["badh"], model="additive")[0][1].coef_) == 2
+    assert len(aa.arid_countreg(health_df, response="numvisit", con_features=["age"], cat_features=["badh"], model="interactive")[0][1].coef_) == 2
+    #In scikit learn interactions do not change the number of coefficients, this a weighted depening con correlation with other features
+    assert len(aa.arid_countreg(health_df, response="numvisit", con_features=["age"], cat_features=["badh"], model="additive")[1].params) == 3
+    assert len(aa.arid_countreg(health_df, response="numvisit", con_features=["age"], cat_features=["badh"], model="interactive")[1].params) == 4
+    assert str(type(aa.arid_countreg(data_frame = health_df, response="numvisit", 
+                                model="additive")[0])) == "<class 'sklearn.pipeline.Pipeline'>"
+    assert str(type(aa.arid_countreg(data_frame = health_df, response="numvisit", 
+                                    model="interactive")[1])) == "<class 'statsmodels.genmod.generalized_linear_model.GLMResultsWrapper'>"
+
+
+    
+
+    
+
