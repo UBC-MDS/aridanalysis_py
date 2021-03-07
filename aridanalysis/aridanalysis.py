@@ -2,7 +2,7 @@ import pandas as pd
 import pandas.api.types as ptypes
 import numpy as np
 import altair as alt
-from sklearn.linear_model import LinearRegression, Lasso, Ridge, ElasticNet
+from sklearn.linear_model import LinearRegression, Lasso, Ridge, ElasticNet, LogisticRegression
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
 from sklearn.linear_model import PoissonRegressor
@@ -159,13 +159,11 @@ def arid_eda(df, response, response_type, features=[]):
     return return_df, dist_output | corr_plot
  
 
-
 def arid_linreg(df, response, features=[], regularization=None, alpha=1):
     """
     Function that performs a linear regression on continuous response data,
     using both an sklearn and statsmodel model analogs. These models are optimized
     for prediction and inference, respectively.
-
     Parameters
     ----------
     data_frame : pandas.Dataframe
@@ -186,7 +184,6 @@ def arid_linreg(df, response, features=[], regularization=None, alpha=1):
         A fitted sklearn model configured with the chosen input parameters
     statsmodels.regression.linear_model
         A fitted statsmodel configured with the chosen input parameters
-
     Examples
     --------
     >>> from aridanalysis import aridanalysis
@@ -251,7 +248,7 @@ def arid_linreg(df, response, features=[], regularization=None, alpha=1):
         
     return skl_model, sm_model
     
-def arid_logreg(data_frame, response, features=[], type="binomial", model="additive", polynomial=False, alpha=0.05):
+def arid_logreg(df, response, features=[], type="binomial"):
     """Function to fit a logistic regression for a binomial or multinomial classification.
     
     Given a data frame, a response variable and explanatory variables (features), 
@@ -260,32 +257,70 @@ def arid_logreg(data_frame, response, features=[], type="binomial", model="addit
     
     Parameters
     ----------
-    data_frame : pandas.DataFrame
+    df : pandas.DataFrame
         The input dataframe to analyze
     response : str
         A column name of the response variable
     features : list
         A list of the column names as explanatory variables
     type : str
-        Classification type. Either "binomial", "ordinal" or "multinomial"
-    model : str
-        Model type. Either "additive" or "interactive"
-    polynomial : bool
-        Whether polynomial features should be considered or not
-    alpha : float
-        Significance level for analysis
+        Classification type. Either "binomial" or "multinomial"
     
     Returns
     -------
-    pandas.DataFrame
-        Data frame with 4 columns: 'features', 'p-value', 'significant', 'interpretation'
+    sklearn.linear_model
+        A fitted logistic regression sklearn model configured with the chosen input parameters
+    statsmodels.discrete.discrete_model
+        A fitted Logit statsmodel configured with the chosen input parameters
     
     Examples
     --------
-    >>> aridanalysis.arid_logreg(df, 'target', ['feat1', 'feat2', 'feat3'], type="multinomial", 
-    model="interactive", polynomial=True, alpha=0.01)
+    >>> aridanalysis.arid_logreg(df, 'Target', ['feat1', 'feat2', 'feat3'], type="binomial")
     """
-    return None
+    # Validate input arguments
+    assert isinstance(df, pd.DataFrame), errors.INVALID_DATAFRAME
+    assert not df.empty , errors.EMPTY_DATAFRAME
+    assert response in df.columns.tolist(), errors.RESPONSE_NOT_FOUND
+    assert type in ["binomial", "multinomial"], errors.INVALID_TYPE_INPUT
+    
+    # Get features list from df
+    feature_df = df.drop(response, axis=1)
+    feature_list = feature_df.select_dtypes(['number']).columns
+    
+    # Report features that have been discarded to the user
+    if len(feature_df.columns) != len(feature_list):
+        non_numeric_features = [feature for feature in feature_df.columns if not (feature in feature_list)]
+        warnings.warn(f"These features are non-numeric and will be discarded: {non_numeric_features}")
+    
+    # Create a subset of user selected features if supplied
+    if len(features) > 0:
+        feature_list = set(features).intersection(feature_list)
+        # Report any user selected features that were not found
+        if len(feature_list) != len(features):
+            missing_features = [feature for feature in features if not (feature in feature_list)]
+            warnings.warn(f"These user-selected features are not present in data: {missing_features}")
+
+    # Assert that there are still features available to perform classification
+    assert len(feature_list) > 0, errors.NO_VALID_FEATURES    
+    
+    # Formally define our features and response
+    X = df[feature_list]
+    y = df[response]
+    
+    # Create and fit analagous models in sklearn and statsmodels
+    if type == "binomial":
+        skl_model = LogisticRegression(penalty='none', fit_intercept = False, multi_class='ovr').fit(X, y)
+        sm_model = sm.Logit(y, X).fit(method="bfgs")
+            
+    else:
+        skl_model = LogisticRegression(penalty='none', fit_intercept = False, multi_class='multinomial').fit(X, y)
+        sm_model = sm.MNLogit(y, X).fit()
+     
+    # Display model coefficients to user
+    print(pd.DataFrame(skl_model.coef_, columns=feature_list))
+    print(sm_model.summary())
+        
+    return skl_model, sm_model
 
 def arid_countreg(data_frame, response, con_features=[], cat_features=[], model="additive", alpha=1):
     """
@@ -311,7 +346,6 @@ def arid_countreg(data_frame, response, con_features=[], cat_features=[], model=
       Constant the controls regularization strength in predictive model
       
       
-
     Returns
     -------
     sklearn.linear_model

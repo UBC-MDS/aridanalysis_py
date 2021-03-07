@@ -17,7 +17,6 @@ import error_strings as errors
 def test_version():
     assert __version__ == '0.1.0'
 
-
 @pytest.fixture
 def simple_frame(): 
     '''
@@ -159,7 +158,6 @@ def test_linreg_model_predictions(simple_frame):
     '''
     Test linear regression output statsmodel and sklearn model predictions match
     '''
-
     assert round(aa.arid_linreg(simple_frame, 'y')[0].predict(np.array([[1,4,3]]))[0], 3) == \
            round((aa.arid_linreg(simple_frame, 'y')[1].predict(np.array([[1,4,3]])))[0], 3)
     assert round(aa.arid_linreg(simple_frame, 'y', regularization = 'L1')[0].predict(np.array([[1,4,3]]))[0], 3) == \
@@ -170,6 +168,37 @@ def test_linreg_model_predictions(simple_frame):
            round((aa.arid_linreg(simple_frame, 'y', regularization = 'L1L2')[1].predict(np.array([[1,4,3]])))[0], 3)
 
 @pytest.fixture
+def log_df(): 
+    '''
+    Create a basic test dataframe for logistic regression tests
+    '''
+    data = [[32, "male", 80, 0], 
+            [26, "female", 65, 1], 
+            [22, "female", 75, 1], 
+            [36, "male", 85, 0], 
+            [45, "male", 82, 1], 
+            [18, "female", 57, 0], 
+            [57, "male", 60, 1]] 
+    log_df = pd.DataFrame(data, columns = ['Age', 'Sex', 'Weight', 'Target']) 
+    return log_df
+
+def test_logreg_model_inputs(log_df):
+    with pytest.raises(AssertionError, match=errors.INVALID_INPUT_LIST):
+        aa.arid_logreg(log_df, response="Target", features="Age", type="binomial")
+    with pytest.raises(AssertionError, match=errors.INVALID_DATAFRAME):
+        aa.arid_logreg(17, response="Target", features=["Age", "Sex"], type="binomial")
+    with pytest.raises(AssertionError, match=errors.EMPTY_DATAFRAME):
+        aa.arid_logreg(pd.DataFrame(), response="Target", features=["Age", "Sex"], type="binomial")
+    with pytest.raises(AssertionError, match=errors.RESPONSE_NOT_FOUND):
+        aa.arid_logreg(df=log_df, response="targ", features=["Age", "Sex"], type="binomial")    
+    with pytest.raises(AssertionError, match=errors.INVALID_TYPE):
+        aa.arid_logreg(log_df, response="Target", features=["Age", "Sex"], type="ordinal")   
+
+def test_logreg_model_outputs(log_df):
+    assert round((aa.arid_logreg(df=log_df, response="Target", features=[], type="binomial")[0].coef_)[0][0], 3) == 0.091
+    assert round((aa.arid_logreg(log_df, response="Target", features=["Age"], type="binomial")[0].coef_)[0][0], 3) == 0.015
+    assert round((aa.arid_logreg(log_df, response="Target", features=["Weight"], type="binomial")[0].coef_)[0][0], 3) == 0.003
+    assert type(aa.arid_logreg(df=log_df, response="Target", features=[], type="binomial")[1]) == statsmodels.discrete.discrete_model.BinaryResultsWrapper 
 def health_df(): 
     '''
     Create a basic test dataframe for linear regression tests
