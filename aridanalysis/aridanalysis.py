@@ -5,8 +5,7 @@ import altair as alt
 from sklearn.linear_model import LinearRegression, Lasso, Ridge, ElasticNet, LogisticRegression
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
-import error_strings as errors
-import warnings
+
 from sklearn.linear_model import PoissonRegressor
 from sklearn.compose import make_column_transformer
 from sklearn.preprocessing import OneHotEncoder
@@ -15,7 +14,8 @@ from sklearn.pipeline import make_pipeline
 import sys, os
 myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + '/../aridanalysis')
-
+import error_strings as errors
+import warnings
 
 def arid_eda(df, response, response_type, features=[]):
     """
