@@ -5,6 +5,8 @@ import altair as alt
 from sklearn.linear_model import LinearRegression, Lasso, Ridge, ElasticNet, LogisticRegression
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
+import error_strings as errors
+import warnings
 from sklearn.linear_model import PoissonRegressor
 from sklearn.compose import make_column_transformer
 from sklearn.preprocessing import OneHotEncoder
@@ -13,16 +15,14 @@ from sklearn.pipeline import make_pipeline
 import sys, os
 myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + '/../aridanalysis')
-import error_strings as errors
-import warnings
+
 
 def arid_eda(df, response, response_type, features=[]):
     """
-    
-    Function to create summary statistics and basic EDA plots. Given a data frame,
-    this function outputs general exploratory analysis plots as well as basic 
-    statistics summarizing trends in the features of the input data. 
-    
+    Function to create summary statistics and basic EDA plots. Given a data
+    frame, this function outputs general exploratory analysis plots as well
+    as basic statistics summarizing trends in the features of the input data.
+
     Parameters
     ----------
     df : pandas.DataFrame
@@ -33,58 +33,55 @@ def arid_eda(df, response, response_type, features=[]):
         Input either 'categorical' or 'continous to indicate response type
     features : list
         A list of the feature names to perform EDA on
-    
+
     Returns
     -------
     altair.Chart
         Plots relevant to the exploratory data analysis
-    
+
     pandas.DataFrame
-        A dataframe containing summary statistics relevant to the 
+        A dataframe containing summary statistics relevant to the
         selected feature and response variable.
-        
+
     Examples
     --------
     >>> from aridanalysis import aridanalysis
     >>> dataframe, plots = arid_eda(house_prices, 'price', 'continuous, ['rooms', 'age','garage'])
     >>> dataframe, plots = arid_eda(iris_data, 'species', categorical,  ['petalWidth', 'sepalWidth','petalLength'])
-    
+
     """
-    
-    
-    ############################ Exception Handling #####################################
+    ########################## Exception Handling ###########################
     if type(df) != pd.core.frame.DataFrame:
         raise KeyError('Input data must be a Pandas DataFrame')
 
     if response not in df.columns:
         raise KeyError('Response variable is not contained within dataframe')
-    
+
     for feat in features:
         if feat not in df.columns: 
             raise KeyError(f'{feat} is not contained within dataframe')
-    
+
     if response in features:
         raise KeyError('Response variable must be distinct from features')
-    
+
     if df[response].dtype == np.dtype('O') and response_type == 'continuous':
         raise KeyError('Current response variable is not continuous')
-    
+
     if df[response].dtype != np.dtype('O') and response_type == 'categorical':
         raise KeyError('Current response variable is not categorical')
-    
+
     if response_type not in ['categorical', 'continuous']:
         raise KeyError('Response must be categorical or continuous')
-    
-    #####################################################################################
- 
+
+    ###########################################################################
+
     chartlist = []
     corr_plot_width = 70*len(set(features))
     corr_plot_height = 70*len(set(features))
-    filter_df = df.loc[:,features]
-    
-    
+    filter_df = df.loc[:, features]
+ 
     if response_type == 'categorical':
-        for feat in features:                                    # This function creates density plots for each feature 
+        for feat in features:                                    # This function creates density plots for each feature
             chart = alt.Chart(df, title=(feat + ' Distribution')).transform_density(     # only works currently if response is categorical 
                 feat,
                 as_=[feat, 'density'],
