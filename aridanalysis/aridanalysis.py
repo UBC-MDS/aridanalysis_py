@@ -180,7 +180,7 @@ def arid_linreg(df, response, features=[], regularization=None, alpha=1):
     Function that performs a linear regression on continuous response data,
     using both an sklearn and statsmodel model analogs. These models are
     optimized for prediction and inference, respectively.
-  
+
     Parameters
     ----------
     data_frame : pandas.Dataframe
