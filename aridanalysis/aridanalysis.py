@@ -66,27 +66,30 @@ def arid_eda(df, response, response_type, features=[]):
 
     """
     #########################################################################
-    if type(df) != pd.core.frame.DataFrame:
-        raise KeyError('Input data must be a Pandas DataFrame')
 
-    if response not in df.columns:
-        raise KeyError('Response variable is not contained within dataframe')
+    assert type(df) == pd.core.frame.DataFrame, \
+        'Input data must be a Pandas DataFrame'
+
+    assert response in df.columns, \
+        'Response variable is not contained within dataframe'
 
     for feat in features:
-        if feat not in df.columns:
-            raise KeyError(f'{feat} is not contained within dataframe')
+        assert feat in df.columns, \
+            f'{feat} is not contained within dataframe'
 
-    if response in features:
-        raise KeyError('Response variable must be distinct from features')
+    assert response not in features, \
+        'Response variable must be distinct from features'
 
-    if df[response].dtype == np.dtype('O') and response_type == 'continuous':
-        raise KeyError('Current response variable is not continuous')
+    if df[response].dtype == np.dtype('O'):
+        assert response_type == 'categorical', \
+            'Current response variable is not continuous'
 
-    if df[response].dtype != np.dtype('O') and response_type == 'categorical':
-        raise KeyError('Current response variable is not categorical')
+    if df[response].dtype != np.dtype('O'):
+        assert response_type == 'numeric', \
+            'Current response variable is not categorical'
 
-    if response_type not in ['categorical', 'continuous']:
-        raise KeyError('Response must be categorical or continuous')
+    assert response_type in ['categorical', 'continuous'], \
+        'Response must be categorical or continuous'
 
     ###########################################################################
 
