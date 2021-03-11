@@ -111,18 +111,16 @@ def arid_eda(df, response, response_type, features=[]):
             chartlist.append(chart)
 
     elif response_type == 'continuous':
-
         for feat in features:  # Creates histograms for each feature
-            for feat in features:  # Creates histograms for each feature
-                chart = (
-                    alt.Chart(df, title=(feat + " Distribution"))
-                    .mark_bar()
-                    .encode(  # only works currently if response is continuous
-                        y="count()", x=alt.X(feat, bin=alt.Bin(), title=feat)
-                    )
-                    .properties(width=200, height=200)
+            chart = (
+                alt.Chart(df, title=(feat + " Distribution"))
+                .mark_bar()
+                .encode(  # only works currently if response is continuous
+                    y="count()", x=alt.X(feat, bin=alt.Bin(), title=feat)
                 )
-                chartlist.append(chart)
+                .properties(width=200, height=200)
+            )
+            chartlist.append(chart)
 
 #      for i in range(len(chartlist)):
 #         if i == 0:
@@ -135,7 +133,6 @@ def arid_eda(df, response, response_type, features=[]):
     row_list = []  # output feature distributions as a square
     first_row = True
     for i in range(len(chartlist)):
-        print(i)
         if i == 0:
             current_row = chartlist[i]
         elif i % 2 != 0:
