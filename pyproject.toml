@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "aridanalysis"
-version = "0.2.1"
+version = "0.2.2"
 description = "Python package for Inferential Regression and EDA analysis."
 authors = ["SantiagoRugelesSch <ansarusc@gmail.com>"]
 license = "MIT"
