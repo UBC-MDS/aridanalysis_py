@@ -24,7 +24,7 @@ flake8 = "^3.8.4"
 python-semantic-release = "^7.15.0"
 
 [tool.semantic_release]
-version_variable = "<package_name>/__init__.py:__version__"
+version_variable = "aridanalysis/__init__.py:__version__"
 version_source = "commit"
 upload_to_pypi = "false"
 patch_without_tag = "true"
