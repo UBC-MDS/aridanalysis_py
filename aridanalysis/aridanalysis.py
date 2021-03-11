@@ -17,7 +17,8 @@ from sklearn.compose import make_column_transformer
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.pipeline import make_pipeline
 
-import sys, os
+import sys
+import os
 myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + '/../aridanalysis')
 import error_strings as errors # noqa E402   
