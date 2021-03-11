@@ -2,7 +2,7 @@
 
 DRY out your regression analysis!
 
-![](https://github.com/ansarusc/aridanalysis/workflows/build/badge.svg) [![codecov](https://codecov.io/gh/ansarusc/aridanalysis/branch/main/graph/badge.svg)](https://codecov.io/gh/ansarusc/aridanalysis) ![Release](https://github.com/ansarusc/aridanalysis/workflows/Release/badge.svg) [![Documentation Status](https://readthedocs.org/projects/aridanalysis/badge/?version=latest)](https://aridanalysis.readthedocs.io/en/latest/?badge=latest)
+![](https://github.com/ansarusc/aridanalysis/workflows/build/badge.svg) [![codecov](https://codecov.io/gh/UBC-MDS/aridanalysis_py/branch/main/graph/badge.svg?token=JGT4Z519QD)](https://codecov.io/gh/UBC-MDS/aridanalysis_py)![Release](https://github.com/ansarusc/aridanalysis/workflows/Release/badge.svg) [![Documentation Status](https://readthedocs.org/projects/aridanalysis/badge/?version=latest)](https://aridanalysis.readthedocs.io/en/latest/?badge=latest)
 
 ## Python Package for Inferential Regression and EDA Analysis!
 
