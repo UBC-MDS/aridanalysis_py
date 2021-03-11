@@ -2,7 +2,7 @@
 
 DRY out your regression analysis!
 
-[![build](https://github.com/UBC-MDS/aridanalysis_py/actions/workflows/build.yml/badge.svg)](https://github.com/UBC-MDS/aridanalysis_py/actions/workflows/build.yml) ![codecov](https://codecov.io/gh/UBC-MDS/aridanalysis_py/branch/main/graph/badge.svg?token=JGT4Z519QD)[![Release](https://github.com/UBC-MDS/aridanalysis_py/actions/workflows/release.yml/badge.svg)](https://github.com/UBC-MDS/aridanalysis_py/actions/workflows/release.yml) [![Documentation Status](https://readthedocs.org/projects/aridanalysis/badge/?version=latest)](https://aridanalysis.readthedocs.io/en/latest/?badge=latest)
+[![build](https://github.com/UBC-MDS/aridanalysis_py/actions/workflows/build.yml/badge.svg)](https://github.com/UBC-MDS/aridanalysis_py/actions/workflows/build.yml) [![codecov](https://codecov.io/gh/UBC-MDS/aridanalysis_py/branch/main/graph/badge.svg?token=JGT4Z519QD)](https://codecov.io/gh/UBC-MDS/nicenumber) [![Release](https://github.com/UBC-MDS/aridanalysis_py/actions/workflows/release.yml/badge.svg)](https://github.com/UBC-MDS/aridanalysis_py/actions/workflows/release.yml) [![Documentation Status](https://readthedocs.org/projects/aridanalysis/badge/?version=latest)](https://aridanalysis.readthedocs.io/en/latest/?badge=latest)
 
 ## Python Package for Inferential Regression and EDA Analysis!
 
