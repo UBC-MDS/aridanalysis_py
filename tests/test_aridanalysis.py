@@ -83,7 +83,7 @@ def test_arideda_empty_df():
     """
     Test if error occurs when repsonse type is not categorical or continuous
     """
-    with pytest.raises(KeyError):
+    with pytest.raises(AssertionError):
         aa.arid_eda(
             data.iris(),
             "species",
@@ -95,7 +95,7 @@ def test_response_type_incorrect():
     """
     Test if an error occurs when wrong response type is given
     """
-    with pytest.raises(KeyError):
+    with pytest.raises(AssertionError):
         aa.arid_eda(
             data.iris(),
             "petalLength",
