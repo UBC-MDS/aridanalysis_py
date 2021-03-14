@@ -26,6 +26,52 @@ This function takes in a data frame and performs either binomial or multinomial 
 
 This function takes a dataframe, its categorical and continuous variables and other user inputs to perform a Poisson regression. The function will return a sklearn Poisson regressor model for prediction and a wrapper statsmodel for inference purposes.
 
+## Usage
+
+```python
+import aridanalysis as aa
+from vega_datasets import data
+>>> dataframe, plots = aa.arid_eda(house_prices,
+                                    'price',
+                                    'continuous,
+                                    ['rooms', 'age','garage'])
+>>> dataframe, plots = aa.arid_eda(iris_data,
+                                    'species',
+                                    categorical,
+                                    ['petalWidth', 'sepalWidth','petalLength'])
+tdf = pd.DataFrame(
+    {
+         "x1": [1, 0, 0],
+         "x2": [0, 1.0, 0],
+         "x3": [0, 0, 1],
+         "x4": ["a", "a", "b"],
+         "y": [1, 3, -1.0],
+    }
+)
+>>> aa.arid_linreg(tdf, y) 
+
+df = pd.DataFrame(
+    {
+        "x1": [1, 0, 0],
+        "x2": [0, 1.0, 0],
+        "x3": [0, 0, 1],
+        "x4": ["a", "a", "b"],
+        "y": [1, 0, 0],
+    }
+)
+>>> aa.arid_logreg(df, y)
+
+df = pd.DataFrame(
+    {
+        "x1": ["bad", "good", "bad"],
+        "x2": [34.56, 34. 21, 19.57],
+        "y": [6,8,14,],
+    }
+)
+>>> aa.arid_countreg(df, y, con_features=[x2], cat_features=[x1], model="additive", alpha=1)
+
+```
+
 ## Python Ecosystem Role
 
 This package will build off the EDA and statistical analysis provided by the [Pandas](https://pypi.org/project/pandas/), [SKLearn](https://scikit-learn.org/stable/) and [Statsmodels](https://www.statsmodels.org/stable/user-guide.html#regression-and-linear-models) Python packages to streamline data visualization and model analysis functionality. There are some existing packages that help you with this, however the `aridanalysis` package aims to ease the job of going through pandas profiling as well as providing different regression analysis interpretations. 
@@ -42,17 +88,16 @@ This package will build off the EDA and statistical analysis provided by the [Pa
 $ pip install -i https://test.pypi.org/simple/ aridanalysis
 ```
 
-## Features
-
-- TODO
-
 ## Dependencies
 
-- TODO
-
-## Usage
-
-- TODO
+- python = "^3.7"
+- pandas = "^1.2.2"
+- scikit-learn = "^0.24.1"
+- altair = "^4.1.0"
+- seaborn = "^0.11.1"
+- statsmodels = "^0.12.2"
+- vega-datasets = "^0.9.0"
+- pytest = "^6.2.2"
 
 ## Documentation
 
