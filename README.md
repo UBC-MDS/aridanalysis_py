@@ -85,7 +85,7 @@ This package will build off the EDA and statistical analysis provided by the [Pa
 ## Installation
 
 ```bash
-$ pip install -i https://test.pypi.org/simple/ aridanalysis
+$ pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple aridanalysis
 ```
 
 ## Dependencies
