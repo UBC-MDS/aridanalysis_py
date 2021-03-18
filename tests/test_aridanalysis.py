@@ -388,9 +388,9 @@ def test_logreg_model_outputs(log_df):
                     log_df, response="Target", features=["Weight"], type="binomial" # noqaE501
                 )[0].coef_
             )[0][0],
-            3,
+            4,
         )
-        == 0.003
+        == 0.0033
     )
     assert (
         type(
@@ -404,12 +404,13 @@ def test_logreg_model_outputs(log_df):
         round(
             (
                 aa.arid_logreg(
-                    log_df, response="Target", features=["Weight"], type="binomial" # noqaE501
+                    log_df, response="Target", features=["Weight"], type="multinomial" # noqaE501
                 )[0].coef_
             )[0][0],
             4,
         )
         == 0.0016
+    )
     assert (
         type(
             aa.arid_logreg(df=log_df, response="Target", features=[], type="multinomial")[ # noqaE501
