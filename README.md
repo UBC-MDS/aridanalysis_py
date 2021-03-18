@@ -69,7 +69,7 @@ df = pd.DataFrame(
         "y"
     ]
 )
->>> aa.arid_logreg(df, Target)
+>>> aa.arid_logreg(df, y)
 
 df = pd.DataFrame(
     {
