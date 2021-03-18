@@ -343,7 +343,7 @@ def test_logreg_model_inputs(log_df):
     with pytest.raises(AssertionError, match=errors.NO_VALID_FEATURES):
         aa.arid_logreg(log_df, response="Target", features="Age", type="binomial") # noqaE501
     with pytest.raises(AssertionError, match=errors.INVALID_DATAFRAME):
-        aa.arid_logreg(17, response="Target", features=["Age", "Sex"], type="binomial") # noqaE501
+        aa.arid_logreg(17, response="Target", features=["Age", "Sex"], type="multinomial") # noqaE501
     with pytest.raises(AssertionError, match=errors.EMPTY_DATAFRAME):
         aa.arid_logreg(
             pd.DataFrame(), response="Target", features=["Age", "Sex"], type="binomial" # noqaE501
@@ -388,9 +388,9 @@ def test_logreg_model_outputs(log_df):
                     log_df, response="Target", features=["Weight"], type="binomial" # noqaE501
                 )[0].coef_
             )[0][0],
-            3,
+            4,
         )
-        == 0.003
+        == 0.0033
     )
     assert (
         type(
@@ -399,6 +399,25 @@ def test_logreg_model_outputs(log_df):
             ]
         )
         == statsmodels.discrete.discrete_model.BinaryResultsWrapper
+    )
+    assert (
+        round(
+            (
+                aa.arid_logreg(
+                    log_df, response="Target", features=["Weight"], type="multinomial" # noqaE501
+                )[0].coef_
+            )[0][0],
+            4,
+        )
+        == 0.0016
+    )
+    assert (
+        type(
+            aa.arid_logreg(df=log_df, response="Target", features=[], type="multinomial")[ # noqaE501
+                1
+            ]
+        )
+        == statsmodels.discrete.discrete_model.MultinomialResultsWrapper
     )
 
 

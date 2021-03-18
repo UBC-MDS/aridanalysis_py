@@ -276,9 +276,10 @@ def arid_linreg(df, response, features=[], regularization=None, alpha=1):
 def arid_logreg(df, response, features=[], type="binomial"):
     """Function to fit a binomial or multinomial logistic regression.
 
-    Given a data frame, a response variable and explanatory variables
-    (features), this function fits a logistic regression and outputs
-    the statistical summary including the interpretation.
+    Function that performs a binomial or multinomial logistic regression
+    using both an sklearn and statsmodel model analogs. These models are
+    optimized for prediction and inference, respectively, and returns the
+    statistical summary.
 
     Parameters
     ----------
