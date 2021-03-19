@@ -6,7 +6,7 @@ DRY out your regression analysis!
 
 ## Python Package for Inferential Regression and EDA Analysis!
 
-As Data Scientists, being able to perform Exploratory Data Analysis as well as Regression Analysis are paramount to the process of analyzing trends in data. Moreover, following the DRY (Do Not Repeat Yourself) principle is regarded as a majority priority for maximizing code quality. Yet, often times Data Scientists facing these tasks will start the entire process from scratch, wasting both time and effort while compromising code quality. The aridanalysis package strives to remedy this problem by giving users an easy-to-implement EDA function alongside 3 robust statistical tests that will simplify these analytical processes and produce an easy to read interpretation of the input data. Users will no longer have to write many lines of code to explore their data effectively. 
+As Data Scientists, being able to perform Exploratory Data Analysis as well as Regression Analysis are paramount to the process of analyzing trends in data. Moreover, following the DRY (Do Not Repeat Yourself) principle is regarded as a majority priority for maximizing code quality. Yet, often times Data Scientists facing these tasks will start the entire process from scratch, wasting both time and effort while compromising code quality. The `aridanalysis` package strives to remedy this problem by giving users an easy-to-implement EDA function alongside 3 robust statistical tests that will simplify these analytical processes and produce an easy to read interpretation of the input data. Users will no longer have to write many lines of code to explore their data effectively. 
 
 ## Package Functions
 
@@ -50,14 +50,24 @@ tdf = pd.DataFrame(
 )
 >>> aa.arid_linreg(tdf, y) 
 
+data = [
+    [32, "male", 80, 0],
+    [26, "female", 65, 1],
+    [22, "female", 75, 1],
+    [36, "male", 85, 0],
+    [45, "male", 82, 1],
+    [18, "female", 57, 0],
+    [57, "male", 60, 1],
+]
+
 df = pd.DataFrame(
-    {
-        "x1": [1, 0, 0],
-        "x2": [0, 1.0, 0],
-        "x3": [0, 0, 1],
-        "x4": ["a", "a", "b"],
-        "y": [1, 0, 0],
-    }
+    data, 
+    columns=[
+        "x1", 
+        "x2", 
+        "x3", 
+        "y"
+    ]
 )
 >>> aa.arid_logreg(df, y)
 
