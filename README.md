@@ -48,7 +48,7 @@ tdf = pd.DataFrame(
          "y": [1, 3, -1.0],
     }
 )
->>> aa.arid_linreg(tdf, y) 
+>>> aa.arid_linreg(tdf, y)
 
 data = [
     [32, "male", 80, 0],
