@@ -1,4 +1,4 @@
-# aridanalysis 
+# aridanalysis
 
 DRY out your regression analysis!
 
