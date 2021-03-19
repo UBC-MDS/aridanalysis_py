@@ -4,6 +4,10 @@ version = "0.4.1"
 description = "Python package for Inferential Regression and EDA analysis."
 authors = ["SantiagoRugelesSch <ansarusc@gmail.com>"]
 license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/UBC-MDS/aridanalysis_py"
+repository = "https://github.com/UBC-MDS/aridanalysis_py"
+documentation = "https://aridanalysis.readthedocs.io/en/latest/"
 
 [tool.poetry.dependencies]
 python = "^3.7"
